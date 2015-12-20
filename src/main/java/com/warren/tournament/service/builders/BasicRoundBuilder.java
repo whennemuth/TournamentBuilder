@@ -32,7 +32,7 @@ public class BasicRoundBuilder implements RoundBuilder {
 	}
 	
 	/**
-	 * In single elimination, the number of matches in a bracket is always one less than the number of sides competing.
+	 * For single elimination, the number of matches in a bracket is always one less than the number of sides competing.
 	 * This assumes that a match is 2 sides compete against each other.
 	 * 
 	 * @param players
