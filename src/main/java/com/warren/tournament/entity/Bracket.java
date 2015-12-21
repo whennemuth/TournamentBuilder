@@ -3,12 +3,23 @@ package com.warren.tournament.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Bracket {
 	
+	private Integer id;
 	private List<Round> rounds = new ArrayList<Round>();
 
 	public Bracket() { }
 
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
 	public List<Round> getRounds() {
 		return rounds;
 	}

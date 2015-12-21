@@ -1,5 +1,8 @@
 package com.warren.tournament.util;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 public class Utils {
 
 	/**
@@ -28,6 +31,15 @@ public class Utils {
 			return args[1] + 1;
 		else
 			return closestLog2(args[0], args[1]+1);
+	}
+	
+	public static String stackTraceToString(Throwable e) {
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		e.printStackTrace(pw);
+		pw.flush();
+		String trace = sw.getBuffer().toString();
+		return trace;
 	}
 
 }

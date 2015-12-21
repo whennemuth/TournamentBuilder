@@ -11,7 +11,7 @@ import com.warren.tournament.util.Utils;
 public class BasicRoundBuilder implements RoundBuilder {
 
 	public Round buildNextRound(Bracket bracket, MatchBuilder matchBuilder, GameType gameType, int players) {
-		if(gameType.getSidesPerGame(players) == 1) {
+		if(gameType.getSidesPerGame(players) < 2) {
 			// Not enough players to have any matches in the round, meaning the finals ended, so return null
 			return null;
 		}
