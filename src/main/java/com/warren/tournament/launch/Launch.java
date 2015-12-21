@@ -18,9 +18,16 @@ public class Launch {
 	public static void startWebServer() throws Exception {
 
     	String webappDirLocation = "src/main/webapp/";
-        server = new Server(Integer.valueOf("8080"));
+        // The port that we should run on can be set into an environment variable
+        // Look for that variable and default to 8080 if it isn't there.
+        String webPort = System.getenv("PORT");
+        if (webPort == null || webPort.isEmpty()) {
+            webPort = "8080";
+        }
+
+        server = new Server(Integer.valueOf(webPort));
         root = new WebAppContext();
-        root.setContextPath("/tournament/builder");
+        root.setContextPath("/");
         root.setDescriptor(webappDirLocation + "/WEB-INF/web.xml");
         root.setResourceBase(webappDirLocation);
 
