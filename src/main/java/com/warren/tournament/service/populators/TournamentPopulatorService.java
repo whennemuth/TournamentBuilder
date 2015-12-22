@@ -15,6 +15,11 @@ import com.warren.tournament.enumerator.FormatRoundRobin;
 public class TournamentPopulatorService {
 
 	public void populateTournament(Tournament tournament, Comparator<Side> sideComparator) {
+		
+		if(true) {
+			return; // TODO: remove this when the function works
+		}
+		
 		if(tournament.getFormatType().equals(FormatBracket.SINGLE_ELIMINATION)) {
 			Set<Side> sides = new TreeSet<Side>(sideComparator);
 			for(Player player : tournament.getPlayers()) {

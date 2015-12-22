@@ -14,8 +14,8 @@ import com.warren.tournament.util.CustomJsonSerializer;
 public class Side {
 
 	private Integer id;
-	private List<Side> opposingSides;
-	private List<Player> players;
+	private List<Side> opposingSides = new ArrayList<Side>();
+	private List<Player> players = new ArrayList<Player>();
 	private Match match;
 	private Float rank;
 	
