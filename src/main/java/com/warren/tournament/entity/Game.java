@@ -1,16 +1,22 @@
 package com.warren.tournament.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import java.io.IOException;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.warren.tournament.util.CustomJsonSerializer;
 
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Game {
 	private Integer id;
 	private Integer order;
 	private Match match;
-	private Score winningScore;
-	private Score losingScore;
+	private Integer winningScore;
+	private Integer losingScore;
+	private Side winningSide;
+	private Side losingSide;
 	
 	public Game(Match match) {
 		this.match = match;
@@ -24,23 +30,25 @@ public class Game {
 		}
 		
 		if(winningScore == null) {
-			winningScore = new Score(side, points);
+			winningScore = points;
+			winningSide = side;
 		}
 		else {
-			losingScore = new Score(side, points);
+			losingScore = points;
+			losingSide = side;
 		}
 		
 		if(losingScore == null) {
 			return;
 		}
 
-		if(losingScore.getPoints() > winningScore.getPoints()) {
+		if(losingScore > winningScore) {
 			flipScores();
 		}
 	}
 
 	private void flipScores() {
-		Score tempScore = winningScore;
+		Integer tempScore = winningScore;
 		winningScore = losingScore;
 		losingScore = tempScore;
 	}
@@ -57,18 +65,35 @@ public class Game {
 	public void setOrder(Integer order) {
 		this.order = order;
 	}
+	@JsonSerialize(using=MatchFieldSerializer.class)
 	public Match getMatch() {
 		return match;
 	}
 	public void setMatch(Match match) {
 		this.match = match;
 	}
-	public Score getWinningScore() {
+	public Integer getWinningScore() {
 		return winningScore;
 	}
-	public Score getLosingScore() {
+	public Integer getLosingScore() {
 		return losingScore;
 	}
-	
+	public Side getWinningSide() {
+		return winningSide;
+	}
+	public Side getLosingSide() {
+		return losingSide;
+	}
+
+
+	public static class MatchFieldSerializer extends JsonSerializer<Match> {
+		@Override public void serialize(
+				Match match, 
+				JsonGenerator generator, 
+				SerializerProvider provider) throws IOException, JsonProcessingException {
+			
+			(new CustomJsonSerializer<Match>()).serialize(match, generator, provider);
+		}
+	}
 	
 }

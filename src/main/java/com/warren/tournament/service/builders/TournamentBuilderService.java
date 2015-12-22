@@ -1,18 +1,12 @@
 package com.warren.tournament.service.builders;
 
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 import com.warren.tournament.api.BracketBuilder;
 import com.warren.tournament.api.MatchBuilder;
 import com.warren.tournament.api.RoundBuilder;
 import com.warren.tournament.entity.Bracket;
-import com.warren.tournament.entity.Match;
 import com.warren.tournament.entity.Player;
-import com.warren.tournament.entity.Round;
 import com.warren.tournament.entity.Tournament;
 import com.warren.tournament.enumerator.FormatBracket;
 import com.warren.tournament.enumerator.FormatRoundRobin;
@@ -31,6 +25,8 @@ public class TournamentBuilderService {
 	 */
 	public Tournament buildTournament(Enum<?> format, GameType gameType, Set<Player> players) {
 		Tournament tournament = new Tournament();
+		tournament.setFormatType(format);
+		tournament.setGameType(gameType);
 		tournament.setPlayers(players);
 		
 		if(format.equals(FormatBracket.SINGLE_ELIMINATION)) {
@@ -54,35 +50,24 @@ public class TournamentBuilderService {
 			tournament.addBracket(loserBracket);
 		}
 		if(format.equals(FormatBracket.CLASSIC_PLATE_DROPDOWN)) {
-			// TODO: implement
 		}
 		if(format.equals(FormatBracket.CONSOLATION)) {
-			// TODO: implement
 		}
 		if(format.equals(FormatBracket.FEED_IN_DROPDOWN)) {
-			// TODO: implement
 		}
 		if(format.equals(FormatBracket.FEED_IN_WITH_CONSOLATION)) {
-			// TODO: implement
 		}
 		if(format.equals(FormatBracket.OLYMPIC_FORMAT_DIVISION)) {
-			// TODO: implement
 		}
 		if(format.equals(FormatBracket.QUALIFIER_DRAW)) {
-			// TODO: implement
 		}
 		if(format.equals(FormatBracket.TRIPLE_KNOCKOUT)) {
-			// TODO: implement
 		}
-		
 		if(format.equals(FormatRoundRobin.ROUND_ROBIN)) {
-			// TODO: implement
 		}
 		if(format.equals(FormatRoundRobin.DOUBLE_ROUND_ROBIN)) {
-			// TODO: implement
 		}
 		if(format.equals(FormatRoundRobin.TRIPLE_ROUND_ROBIN)) {
-			// TODO: implement
 		}
 		return tournament;
 	}

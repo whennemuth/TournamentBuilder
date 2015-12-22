@@ -1,12 +1,16 @@
 package com.warren.tournament.entity;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.warren.tournament.util.CustomJsonSerializer;
 
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Match {
 
 	private Integer id;
@@ -23,6 +27,7 @@ public class Match {
 	public Match(Round round) {
 		this.round = round;
 	}
+	@JsonSerialize(using=RoundFieldSerializer.class)
 	public Round getRound() {
 		return round;
 	}
@@ -48,6 +53,17 @@ public class Match {
 	public void setGames(List<Game> games) {
 		this.games = games;
 	}
+
+	public static class RoundFieldSerializer extends JsonSerializer<Round> {
+		@Override public void serialize(
+				Round round, 
+				JsonGenerator generator, 
+				SerializerProvider provider) throws IOException, JsonProcessingException {
+			
+			(new CustomJsonSerializer<Round>()).serialize(round, generator, provider);
+		}
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();

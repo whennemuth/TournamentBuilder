@@ -1,13 +1,17 @@
 package com.warren.tournament.entity;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.warren.tournament.util.CustomJsonSerializer;
 
-// @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Round {
 
 	private Bracket bracket;
@@ -24,6 +28,8 @@ public class Round {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+	
+	@JsonSerialize(using=BracketFieldSerializer.class)
 	public Bracket getBracket() {
 		return bracket;
 	}
@@ -45,6 +51,26 @@ public class Round {
 			i += m.getSides().size();
 		}
 		return i;
+	}
+
+	public Set<Side> getPopulatedSides() {
+		// TODO: Finish this code
+		return null;
+	}
+
+	public Set<Side> getEmptySides() {
+		// TODO: Finish this code
+		return null;
+	}
+
+	public static class BracketFieldSerializer extends JsonSerializer<Bracket> {
+		@Override public void serialize(
+				Bracket bracket, 
+				JsonGenerator generator, 
+				SerializerProvider provider) throws IOException, JsonProcessingException {
+			
+			(new CustomJsonSerializer<Bracket>()).serialize(bracket, generator, provider);
+		}
 	}
 
 	@Override

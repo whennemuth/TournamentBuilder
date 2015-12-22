@@ -4,6 +4,7 @@ import java.util.Comparator;
 import java.util.Set;
 
 import com.warren.tournament.entity.Player;
+import com.warren.tournament.entity.Side;
 import com.warren.tournament.entity.Tournament;
 import com.warren.tournament.enumerator.GameType;
 import com.warren.tournament.enumerator.MatchingMethod;
@@ -23,19 +24,24 @@ public class TournamentService {
 		Tournament tournament = builder.buildTournament(format, gameType, players);
 		
 		// Populate the tournament (or at least the first round of the first bracket)
-		TournamentPopulatorService populator = new TournamentPopulatorService(format, gameType, players);
+		TournamentPopulatorService populator = new TournamentPopulatorService();
 		/**
 		 * Whatever the matching method, the comparator will sort players correspondingly so that any 
 		 * player at the top of the list should be matched with the player at the bottom of the list
 		 */
-		Comparator<Player> comparator = null;
+		Comparator<Side> comparator = null;
 		switch(matchingMethod) {
 		case CLOSEST_RANK:
 			break;
 		case HIGHEST_WITH_LOWEST_RANK:
-			comparator = new Comparator<Player>() {
-				public int compare(Player player1, Player player2) {
-					return player1.getRank() - player2.getRank();
+			comparator = new Comparator<Side>() {
+				public int compare(Side side1, Side side2) {
+					try {
+						return side1.getRank().compareTo(side2.getRank());
+					} 
+					catch (Exception e) {
+						return 0;
+					}
 				}
 			};
 			break;
