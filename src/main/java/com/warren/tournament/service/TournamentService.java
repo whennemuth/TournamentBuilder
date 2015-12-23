@@ -17,7 +17,8 @@ public class TournamentService {
 			Enum<?> format, 
 			GameType gameType, 
 			MatchingMethod matchingMethod, 
-			Set<Player> players) {
+			Set<Player> players,
+			int gamesPerMatch) {
 		
 		// Build the tournament
 		TournamentBuilderService builder = new TournamentBuilderService();
@@ -26,8 +27,12 @@ public class TournamentService {
 		// Populate the tournament (or at least the first round of the first bracket)
 		TournamentPopulatorService populator = new TournamentPopulatorService();
 		/**
-		 * Whatever the matching method, the comparator will sort players correspondingly so that any 
-		 * player at the top of the list should be matched with the player at the bottom of the list
+		 * Whatever the matching method, the comparator will sort sides correspondingly so that any 
+		 * side at the top of the list should be matched with the side at the bottom of the list
+		 * 
+		 * TODO: The above is probably too complicated - figure out another way (may involve injecting 
+		 * something else along with the comparator that controls selection from the sorted list of sides 
+		 * so that selecting from the top and bottom of the list is not the only option).
 		 */
 		Comparator<Side> comparator = null;
 		switch(matchingMethod) {
@@ -51,6 +56,8 @@ public class TournamentService {
 			break;
 		}
 
+		tournament.setGamesPerMatch(gamesPerMatch);
+		tournament.setMatchingMethod(matchingMethod);
 		populator.populateTournament(tournament, comparator);
 		
 		return tournament;

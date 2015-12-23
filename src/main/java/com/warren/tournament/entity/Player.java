@@ -4,6 +4,7 @@ import java.sql.Date;
 
 public class Player {
 
+	private Integer id;
 	private String fname;
 	private String lname;
 	private Date dob;
@@ -16,6 +17,12 @@ public class Player {
 	private String zip;
 	private Integer rank;
 	private String email;
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
 	public String getFname() {
 		return fname;
 	}
@@ -130,6 +137,11 @@ public class Player {
 		if (getClass() != obj.getClass())
 			return false;
 		Player other = (Player) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
 		if (email == null) {
 			if (other.email != null)
 				return false;

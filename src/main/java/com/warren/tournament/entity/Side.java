@@ -68,7 +68,7 @@ public class Side {
 		if(this.rank != null) {
 			return this.rank;
 		}
-		if(players == null) {
+		if(players == null || players.isEmpty()) {
 			return null;
 		}
 		Float rank = null;
@@ -117,6 +117,38 @@ public class Side {
 		builder.append("Side [opposingSides=").append(opposingSides.size())
 				.append(", players=").append(players).append("]");
 		return builder.toString();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Side other = (Side) obj;
+		
+		if(id != null && other.id != null) 
+			return id.equals(other.id);
+		
+		if (match != null && match.getId() != null && other.match != null && other.match.getId() != null) {
+			if(!match.getId().equals(other.match.getId()))
+				return false;
+		}		
+		
+		// From this point assume equals if both sides have the same players
+		if (players == null || other.players == null) 
+			return false;
+		if (players.isEmpty() || other.players.isEmpty())
+			return false;
+		if (players.size() != other.players.size())
+			return false;
+
+		List<Player> thisPlayers = new ArrayList<Player>(players);
+		List<Player> otherPlayers = new ArrayList<Player>(other.players);
+		thisPlayers.removeAll(otherPlayers);
+		return thisPlayers.isEmpty();
 	}
 	
 	

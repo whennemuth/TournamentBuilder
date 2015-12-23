@@ -2,9 +2,11 @@ package com.warren.tournament.entity;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -53,14 +55,50 @@ public class Round {
 		return i;
 	}
 
+	/**
+	 * @return Every side for every match in the round that has been assigned all its players.
+	 */
+	@JsonIgnore
 	public Set<Side> getPopulatedSides() {
-		// TODO: Finish this code
-		return null;
+		return getSides(true);
 	}
 
+	/**
+	 * @return Every side for every match in the round that has NOT been assigned all its players.
+	 */
+	@JsonIgnore
 	public Set<Side> getEmptySides() {
-		// TODO: Finish this code
-		return null;
+		return getSides(false);
+	}
+	
+	private Set<Side> getSides(boolean populated) {
+		Set<Side> sides = new HashSet<Side>();
+		for(Match match : matches) {
+			for(Side side : match.getSides()) {
+				int expectedPlayers = bracket.getTournament().getGameType().getPlayersPerSide();
+				if(side.getPlayers().size() == expectedPlayers && populated) {
+					sides.add(side); // Adding side that is populated with players
+				}
+				else if(side.getPlayers().size() < expectedPlayers && !populated) {
+					sides.add(side); // Adding side that is not populated (fully) with players
+				}
+			}
+		}
+		return sides;
+	}
+
+	/**
+	 * @return Has every game for each match in the round been played.
+	 */
+	public boolean isComplete() {
+		for(Match match : matches) {
+			int expectedGames = bracket.getTournament().getGamesPerMatch();
+			if(match.getGames() == null || match.getGames().isEmpty())
+				return false;
+			if(match.getGames().size() < expectedGames) 
+				return false;			
+		}
+		return true;
 	}
 
 	public static class BracketFieldSerializer extends JsonSerializer<Bracket> {

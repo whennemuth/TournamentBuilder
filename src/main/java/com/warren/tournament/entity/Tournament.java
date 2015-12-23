@@ -15,6 +15,7 @@ public class Tournament {
 	private MatchingMethod matchingMethod;
 	private Enum<?> formatType;
 	private String format;
+	private Integer gamesPerMatch;
 	
 	public Integer getId() {
 		return id;
@@ -47,6 +48,12 @@ public class Tournament {
 	}
 	public void setPlayers(Set<Player> players) {
 		this.players = players;
+	}
+	public Integer getGamesPerMatch() {
+		return gamesPerMatch;
+	}
+	public void setGamesPerMatch(Integer gamesPerMatch) {
+		this.gamesPerMatch = gamesPerMatch;
 	}
 	public GameType getGameType() {
 		return gameType;

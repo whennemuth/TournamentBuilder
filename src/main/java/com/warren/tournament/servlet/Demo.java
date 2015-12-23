@@ -59,6 +59,8 @@ public class Demo extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		int playerCount = Integer.parseInt(request.getParameter("count"));
+		// int gamesPerMatch = Integer.parseInt(request.getParameter("gamesPerMatch"));
+		int gamesPerMatch = 3;
 		TournamentService svc = new TournamentService();
 		Set<Player> players = new HashSet<Player>();
 		
@@ -75,7 +77,8 @@ public class Demo extends HttpServlet {
 				FormatBracket.SINGLE_ELIMINATION, 
 				GameType.SINGLES, 
 				MatchingMethod.HIGHEST_WITH_LOWEST_RANK, 
-				players);
+				players,
+				gamesPerMatch);
 
 		String json = null;
 		try {

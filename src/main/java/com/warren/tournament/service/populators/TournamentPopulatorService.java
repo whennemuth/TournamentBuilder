@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import com.warren.tournament.entity.Bracket;
+import com.warren.tournament.entity.Match;
 import com.warren.tournament.entity.Player;
 import com.warren.tournament.entity.Round;
 import com.warren.tournament.entity.Side;
@@ -16,34 +17,58 @@ public class TournamentPopulatorService {
 
 	public void populateTournament(Tournament tournament, Comparator<Side> sideComparator) {
 		
-		if(true) {
-			return; // TODO: remove this when the function works
-		}
+//		if(true) {
+//			return; // TODO: remove this when the function works
+//		}
 		
 		if(tournament.getFormatType().equals(FormatBracket.SINGLE_ELIMINATION)) {
-			Set<Side> sides = new TreeSet<Side>(sideComparator);
-			for(Player player : tournament.getPlayers()) {
-				Side side = new Side(null);
-				side.addPlayer(player);
-			}
 			
-			if(tournament.getBrackets() != null && tournament.getBrackets().isEmpty() == false) {
-				Bracket bracket = tournament.getBrackets().iterator().next();
-				for(Round round : bracket.getRounds()) {
-					Set<Side> fullSides = round.getPopulatedSides();
-					Set<Side> emptySides = round.getEmptySides();
-					sides.removeAll(fullSides); // TODO: Write equals methods for Match and Side, for this removeAll to work 
-					if(emptySides.isEmpty()) {
-						// This round is already fully populated, so go to the next round.
-						continue;
-					}
-					if(!fullSides.isEmpty()) {
-						// TODO: write code here to populate all of, or the remainder of the round and no further rounds.
-						// All remaining content in sides should be those that have not yet been knocked out and have not already been assigned to matches. 
-						break;
+			// Create a Sortable set of sides that accounts for all players in the tournament.
+			// These sides can be sorted because they have players and the comparator can work of their combined ranks.
+			TreeSet<Side> sides = new TreeSet<Side>(sideComparator);
+			
+			// A round must be fully populated before it
+			Bracket bracket = tournament.getBrackets().iterator().next();	// Gets the first and only bracket
+			for(Round round : bracket.getRounds()) {
+				
+				if(sides.isEmpty()) {
+					for(Player player : tournament.getPlayers()) {
+						Match dummyMatch = new Match(round);
+						Side side = new Side(dummyMatch);
+						side.addPlayer(player);
+						sides.add(side);
 					}
 				}
+				
+				Set<Side> fullSides = round.getPopulatedSides();
+				Set<Side> emptySides = round.getEmptySides();
+								
+				if(emptySides.isEmpty() && round.isComplete()) {
+					// This round is already fully populated and each match has ended, so go to the next round.
+					continue; 
+				}
+				else if(emptySides.isEmpty()) {
+					// This round is already fully populated, but not every match has ended, so exit out.
+					break; 
+				}
+				else {
+					// Reduce sides down to those that have not lost yet and have not already been assigned to matches in the round
+					sides.removeAll(fullSides); // TODO: Write equals methods for Match and Side, for this removeAll to work
+					// populate all of, or the remainder of the round and no further rounds.
+					for(Match match : round.getMatches()) {
+						if(!match.hasPlayers()) {
+							Side side1 = sides.first();
+							Side side2 = sides.last();
+							match.getSides().get(0).setPlayers(side1.getPlayers());
+							match.getSides().get(1).setPlayers(side2.getPlayers());
+							sides.remove(side1);
+							sides.remove(side2);
+						}
+					}
+					break;
+				}
 			}
+			
 		}
 		if(tournament.getFormatType().equals(FormatBracket.DOUBLE_ELIMINATION)) {
 		}

@@ -53,6 +53,21 @@ public class Match {
 	public void setGames(List<Game> games) {
 		this.games = games;
 	}
+	/**
+	 * For now we are considering that a match has been assigned all its players if any side has at least one player.
+	 * The assumption is that no match or side would ever be in a state of having been partially assigned players.
+	 * @return
+	 */
+	public boolean hasPlayers() {
+		if(sides == null || sides.isEmpty())
+			return false;
+		for(Side side : sides) {
+			if(side.getPlayers() == null || side.getPlayers().isEmpty()) {
+				return false;
+			}
+		}
+		return true;
+	}
 
 	public static class RoundFieldSerializer extends JsonSerializer<Round> {
 		@Override public void serialize(
@@ -71,4 +86,31 @@ public class Match {
 				.append(games).append("]");
 		return builder.toString();
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Match other = (Match) obj;
+		if(id != null && other.id != null) 
+			return id.equals(other.id);
+		
+		// From this point assume equals if both matches have the same sides
+		if (sides == null || other.sides == null) 
+			return false;
+		if (sides.isEmpty() || other.sides.isEmpty())
+			return false;
+		if (sides.size() != other.sides.size())
+			return false;
+
+		List<Side> thisSides = new ArrayList<Side>(sides);
+		List<Side> otherSides = new ArrayList<Side>(other.sides);
+		thisSides.removeAll(otherSides);
+		return thisSides.isEmpty();
+	}
+	
 }
