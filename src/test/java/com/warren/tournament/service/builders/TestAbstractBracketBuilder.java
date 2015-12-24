@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.TreeSet;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -50,7 +51,7 @@ public class TestAbstractBracketBuilder {
 	public void setUp() throws Exception {
 		
 		// Build a set of 35 Mock players and make the tournament mock return them from the corresponding getter.
-		final HashSet<Player> playerMocks = PlayerMocks.getPlayerMocks(35);
+		final TreeSet<Player> playerMocks = PlayerMocks.getPlayerMocks(35);
 		when(tournament.getPlayers()).thenReturn(playerMocks);
 		
 		// Create the RoundBuilder
@@ -63,14 +64,14 @@ public class TestAbstractBracketBuilder {
 				
 				Side side1 = Mockito.mock(Side.class);
 				when(side1.getMatch()).thenReturn(singlesMatch);
-				when(side1.getPlayers()).thenReturn(Arrays.asList(new Player[]{(Player) playerMocks.toArray()[0]}));
+				when(side1.getPlayers()).thenReturn(new HashSet<Player>(Arrays.asList(new Player[]{(Player) playerMocks.toArray()[0]})));
 				
 				Side side2 = Mockito.mock(Side.class);
 				when(side2.getMatch()).thenReturn(singlesMatch);
-				when(side2.getPlayers()).thenReturn(Arrays.asList(new Player[]{(Player) playerMocks.toArray()[1]}));
+				when(side2.getPlayers()).thenReturn(new HashSet<Player>(Arrays.asList(new Player[]{(Player) playerMocks.toArray()[1]})));
 				
-				when(side1.getOpposingSides()).thenReturn(Arrays.asList(new Side[]{side2}));
-				when(side2.getOpposingSides()).thenReturn(Arrays.asList(new Side[]{side1}));
+				when(side1.getOpposingSides()).thenReturn(new HashSet<Side>(Arrays.asList(new Side[]{side2})));
+				when(side2.getOpposingSides()).thenReturn(new HashSet<Side>(Arrays.asList(new Side[]{side1})));
 				
 				sides.add(side1);
 				sides.add(side2);
@@ -84,20 +85,20 @@ public class TestAbstractBracketBuilder {
 				
 				Side side1 = Mockito.mock(Side.class);
 				when(side1.getMatch()).thenReturn(doublesMatch);
-				when(side1.getPlayers()).thenReturn(Arrays.asList(new Player[]{
+				when(side1.getPlayers()).thenReturn(new HashSet<Player>(Arrays.asList(new Player[]{
 						(Player) playerMocks.toArray()[0],
 						(Player) playerMocks.toArray()[1]
-				}));
+				})));
 				
 				Side side2 = Mockito.mock(Side.class);
 				when(side2.getMatch()).thenReturn(doublesMatch);
-				when(side2.getPlayers()).thenReturn(Arrays.asList(new Player[]{
+				when(side2.getPlayers()).thenReturn(new HashSet<Player>(Arrays.asList(new Player[]{
 						(Player) playerMocks.toArray()[2],
 						(Player) playerMocks.toArray()[3]
-				}));
+				})));
 				
-				when(side1.getOpposingSides()).thenReturn(Arrays.asList(new Side[]{side2}));
-				when(side2.getOpposingSides()).thenReturn(Arrays.asList(new Side[]{side1}));
+				when(side1.getOpposingSides()).thenReturn(new HashSet<Side>(Arrays.asList(new Side[]{side2})));
+				when(side2.getOpposingSides()).thenReturn(new HashSet<Side>(Arrays.asList(new Side[]{side1})));
 				
 				sides.add(side1);
 				sides.add(side2);

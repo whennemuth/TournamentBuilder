@@ -54,15 +54,16 @@ public class Match {
 		this.games = games;
 	}
 	/**
-	 * For now we are considering that a match has been assigned all its players if any side has at least one player.
-	 * The assumption is that no match or side would ever be in a state of having been partially assigned players.
+	 * Has a match been assigned all its players - has each side got its full complement of players (ie: 2 for doubles).
+	 * The assumption is that no match would ever have more than zero, but less than the full complement of players.
 	 * @return
 	 */
 	public boolean hasPlayers() {
 		if(sides == null || sides.isEmpty())
 			return false;
 		for(Side side : sides) {
-			if(side.getPlayers() == null || side.getPlayers().isEmpty()) {
+			int playersPerSide = round.getBracket().getTournament().getGameType().getPlayersPerSide();
+			if(side.getPlayers() == null || side.getPlayers().size() != playersPerSide) {
 				return false;
 			}
 		}

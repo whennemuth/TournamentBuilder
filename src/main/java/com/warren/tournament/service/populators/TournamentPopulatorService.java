@@ -15,19 +15,14 @@ import com.warren.tournament.enumerator.FormatRoundRobin;
 
 public class TournamentPopulatorService {
 
-	public void populateTournament(Tournament tournament, Comparator<Side> sideComparator) {
-		
-//		if(true) {
-//			return; // TODO: remove this when the function works
-//		}
+	public boolean populateNextRound(Tournament tournament, Comparator<Side> sideComparator) {
 		
 		if(tournament.getFormatType().equals(FormatBracket.SINGLE_ELIMINATION)) {
 			
 			// Create a Sortable set of sides that accounts for all players in the tournament.
-			// These sides can be sorted because they have players and the comparator can work of their combined ranks.
+			// These sides can be sorted because they have players and the comparator can work off their combined ranks.
 			TreeSet<Side> sides = new TreeSet<Side>(sideComparator);
 			
-			// A round must be fully populated before it
 			Bracket bracket = tournament.getBrackets().iterator().next();	// Gets the first and only bracket
 			for(Round round : bracket.getRounds()) {
 				
@@ -49,7 +44,7 @@ public class TournamentPopulatorService {
 				}
 				else if(emptySides.isEmpty()) {
 					// This round is already fully populated, but not every match has ended, so exit out.
-					break; 
+					return false; 
 				}
 				else {
 					// Reduce sides down to those that have not lost yet and have not already been assigned to matches in the round
@@ -65,10 +60,9 @@ public class TournamentPopulatorService {
 							sides.remove(side2);
 						}
 					}
-					break;
+					return true;
 				}
 			}
-			
 		}
 		if(tournament.getFormatType().equals(FormatBracket.DOUBLE_ELIMINATION)) {
 		}
@@ -93,6 +87,7 @@ public class TournamentPopulatorService {
 		if(tournament.getFormatType().equals(FormatRoundRobin.TRIPLE_ROUND_ROBIN)) {
 		}
 		
+		return false;
 	}
 
 }

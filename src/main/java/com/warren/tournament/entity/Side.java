@@ -2,7 +2,9 @@ package com.warren.tournament.entity;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -14,8 +16,8 @@ import com.warren.tournament.util.CustomJsonSerializer;
 public class Side {
 
 	private Integer id;
-	private List<Side> opposingSides = new ArrayList<Side>();
-	private List<Player> players = new ArrayList<Player>();
+	private Set<Side> opposingSides = new HashSet<Side>();
+	private Set<Player> players = new HashSet<Player>();
 	private Match match;
 	private Float rank;
 	
@@ -31,23 +33,23 @@ public class Side {
 		this.id = id;
 	}
 	@JsonSerialize(using=SideFieldSerializer.class)
-	public List<Side> getOpposingSides() {
+	public Set<Side> getOpposingSides() {
 		return opposingSides;
 	}
-	public void setOpposingSides(List<Side> opposingSides) {
+	public void setOpposingSides(Set<Side> opposingSides) {
 		this.opposingSides = opposingSides;
 	}
 	public void addOpposingSide(Side side) {
 		if(opposingSides == null) {
-			opposingSides = new ArrayList<Side>();
+			opposingSides = new HashSet<Side>();
 		}
 		opposingSides.add(side);
 	}
-	public List<Player> getPlayers() {
+	public Set<Player> getPlayers() {
 		return players;
 	}
-	public void setPlayers(List<Player> players) {
-		this.players = players;
+	public void setPlayers(Set<Player> players) {
+		this.players = new HashSet<Player>(players);
 	}
 	public void addPlayer(Player player) {
 		if(!players.contains(player)) {
@@ -76,7 +78,15 @@ public class Side {
 			Integer playerCount = match.getRound().getBracket().getTournament().getGameType().getPlayersPerSide();
 			if(playerCount.equals(players.size())){
 				for(Player player : players) {
-					rank = rank == null ? new Float(player.getRank()) : rank + new Float(player.getRank());
+					if(player.getRank() == null) {
+						return null;
+					}
+					else if(rank == null) {
+						rank = new Float(player.getRank());
+					}
+					else {
+						rank = rank + new Float(player.getRank());
+					}
 				}
 			}
 			rank = rank/playerCount;
@@ -133,8 +143,7 @@ public class Side {
 			return id.equals(other.id);
 		
 		if (match != null && match.getId() != null && other.match != null && other.match.getId() != null) {
-			if(!match.getId().equals(other.match.getId()))
-				return false;
+			return match.getId().equals(other.match.getId());
 		}		
 		
 		// From this point assume equals if both sides have the same players
@@ -150,6 +159,5 @@ public class Side {
 		thisPlayers.removeAll(otherPlayers);
 		return thisPlayers.isEmpty();
 	}
-	
 	
 }

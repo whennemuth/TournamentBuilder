@@ -9,13 +9,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.warren.tournament.entity.Player;
 import com.warren.tournament.entity.Tournament;
 import com.warren.tournament.enumerator.FormatBracket;
 import com.warren.tournament.enumerator.GameType;
 import com.warren.tournament.enumerator.MatchingMethod;
+import com.warren.tournament.service.TournamentParms;
 import com.warren.tournament.service.TournamentService;
 import com.warren.tournament.util.Utils;
 
@@ -28,9 +28,7 @@ public class Demo extends HttpServlet {
     /**
      * Default constructor. 
      */
-    public Demo() {
-        // TODO Auto-generated constructor stub
-    }
+    public Demo() { }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -73,22 +71,18 @@ public class Demo extends HttpServlet {
 			players.add(p);
 		}
 		
-		Tournament t = svc.getTournament(
-				FormatBracket.SINGLE_ELIMINATION, 
-				GameType.SINGLES, 
-				MatchingMethod.HIGHEST_WITH_LOWEST_RANK, 
-				players,
-				gamesPerMatch);
+		TournamentParms parms = new TournamentParms();
+		parms.setFormat(FormatBracket.SINGLE_ELIMINATION);
+		parms.setGamesPerMatch(gamesPerMatch);
+		parms.setGameType(GameType.SINGLES);
+		parms.setMatchingMethod(MatchingMethod.HIGHEST_WITH_LOWEST_RANK);
+		parms.setPlayers(players);
+		
+		Tournament t = svc.getTournament(parms, true);
 
 		String json = null;
 		try {
 			ObjectMapper mapper = new ObjectMapper();
-			// 
-			/**
-			 * TODO: Due to bi-directional references in Bracket class and Round class, the mapper gets stuck in a recursion 
-			 * loop when serializing to json. Find out why the @JsonIdentityInfo annotations have not fixed this or, try using
-			 * @JsonSerialize, creating a custom serializer for the "many" field in the one-to-many collections.
-			 */
 			json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(t);
 		} 
 		catch (Exception e) {
