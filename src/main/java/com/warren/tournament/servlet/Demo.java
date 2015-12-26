@@ -66,7 +66,7 @@ public class Demo extends HttpServlet {
 			Player p = new Player();
 			p.setEmail("player" + String.valueOf(i+1) + "@gmail.com");
 			p.setFname("fn" + String.valueOf(i+1));
-			p.setLname("fn" + String.valueOf(i+1));
+			p.setLname("ln" + String.valueOf(i+1));
 			p.setRank(i+1);
 			players.add(p);
 		}

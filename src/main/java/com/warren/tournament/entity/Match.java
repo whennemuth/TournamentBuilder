@@ -53,6 +53,11 @@ public class Match {
 	public void setGames(List<Game> games) {
 		this.games = games;
 	}
+	public void addGame(Game game) {
+		if(games == null)
+			games = new ArrayList<Game>();
+		games.add(game);
+	}
 	/**
 	 * Has a match been assigned all its players - has each side got its full complement of players (ie: 2 for doubles).
 	 * The assumption is that no match would ever have more than zero, but less than the full complement of players.

@@ -85,6 +85,9 @@ public class Game {
 		return losingSide;
 	}
 
+	public boolean isComplete() {
+		return winningScore != null && losingScore != null;
+	}
 
 	public static class MatchFieldSerializer extends JsonSerializer<Match> {
 		@Override public void serialize(
@@ -95,5 +98,4 @@ public class Game {
 			(new CustomJsonSerializer<Match>()).serialize(match, generator, provider);
 		}
 	}
-	
 }

@@ -1,6 +1,7 @@
 package com.warren.tournament.entity;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -19,6 +20,8 @@ public class Round {
 	private Bracket bracket;
 	private List<Match> matches = new ArrayList<Match>();
 	private Integer id;
+	private Timestamp created;
+	private Timestamp updated;
 	
 	public Round(Bracket bracket) {
 		this.bracket = bracket;
@@ -46,6 +49,20 @@ public class Round {
 	}
 	public void addMatch(Match match) {
 		this.matches.add(match);
+	}
+	public Timestamp getCreated() {
+		return created;
+	}
+	public void setCreated(Timestamp created) {
+		if(created == null)
+			created = new Timestamp(System.currentTimeMillis());
+		this.created = created;
+	}
+	public Timestamp getUpdated() {
+		return updated;
+	}
+	public void setUpdated(Timestamp updated) {
+		this.updated = updated;
 	}
 	public int getSideCount() {
 		int i = 0;
@@ -96,7 +113,12 @@ public class Round {
 			if(match.getGames() == null || match.getGames().isEmpty())
 				return false;
 			if(match.getGames().size() < expectedGames) 
-				return false;			
+				return false;	
+			for(Game game : match.getGames()) {
+				if(!game.isComplete()) {
+					return false;
+				}
+			}
 		}
 		return true;
 	}
@@ -116,6 +138,43 @@ public class Round {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Round [matches=").append(matches).append("]");
 		return builder.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((bracket == null) ? 0 : bracket.hashCode());
+		result = prime * result + ((created == null) ? 0 : created.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Round other = (Round) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (created == null) {
+			if (other.created != null)
+				return false;
+		} else if (!created.equals(other.created))
+			return false;
+		if (bracket == null) {
+			if (other.bracket != null)
+				return false;
+		} else if (!bracket.equals(other.bracket))
+			return false;
+		return true;
 	}
 	
 }

@@ -111,13 +111,13 @@ public class Side {
 		}
 	}
 
-	public static class SideFieldSerializer extends JsonSerializer<List<Side>> {
+	public static class SideFieldSerializer extends JsonSerializer<Set<Side>> {
 		@Override public void serialize(
-				List<Side> sides, 
+				Set<Side> sides, 
 				JsonGenerator generator, 
 				SerializerProvider provider) throws IOException, JsonProcessingException {
 			
-			(new CustomJsonSerializer<List<Side>>()).serialize(sides, generator, provider);
+			(new CustomJsonSerializer<Set<Side>>()).serialize(sides, generator, provider);
 		}
 	}
 	

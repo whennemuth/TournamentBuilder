@@ -48,7 +48,7 @@ public class TournamentPopulatorService {
 				}
 				else {
 					// Reduce sides down to those that have not lost yet and have not already been assigned to matches in the round
-					sides.removeAll(fullSides); // TODO: Write equals methods for Match and Side, for this removeAll to work
+					sides.removeAll(fullSides);
 					// populate all of, or the remainder of the round and no further rounds.
 					for(Match match : round.getMatches()) {
 						if(!match.hasPlayers()) {
