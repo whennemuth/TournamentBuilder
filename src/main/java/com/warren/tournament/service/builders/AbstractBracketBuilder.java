@@ -3,9 +3,9 @@ package com.warren.tournament.service.builders;
 import com.warren.tournament.api.BracketBuilder;
 import com.warren.tournament.api.MatchBuilder;
 import com.warren.tournament.api.RoundBuilder;
-import com.warren.tournament.entity.Bracket;
-import com.warren.tournament.entity.Round;
-import com.warren.tournament.entity.Tournament;
+import com.warren.tournament.entity1.Bracket;
+import com.warren.tournament.entity1.Round;
+import com.warren.tournament.entity1.Tournament;
 import com.warren.tournament.enumerator.GameType;
 
 public abstract class AbstractBracketBuilder implements BracketBuilder {
@@ -34,7 +34,6 @@ public abstract class AbstractBracketBuilder implements BracketBuilder {
 			remainingPlayers -= (gameType.getPlayersPerSide() * round.getSideCount())/2;
 		}
 		
-		tournament.addBracket(bracket);
 		return bracket;
 	}
 	

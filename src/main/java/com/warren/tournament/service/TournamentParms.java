@@ -2,7 +2,7 @@ package com.warren.tournament.service;
 
 import java.util.Set;
 
-import com.warren.tournament.entity.Player;
+import com.warren.tournament.entity1.Player;
 import com.warren.tournament.enumerator.GameType;
 import com.warren.tournament.enumerator.MatchingMethod;
 

@@ -4,12 +4,12 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.warren.tournament.entity.Bracket;
-import com.warren.tournament.entity.Match;
-import com.warren.tournament.entity.Player;
-import com.warren.tournament.entity.Round;
-import com.warren.tournament.entity.Side;
-import com.warren.tournament.entity.Tournament;
+import com.warren.tournament.entity1.Bracket;
+import com.warren.tournament.entity1.Match;
+import com.warren.tournament.entity1.Player;
+import com.warren.tournament.entity1.Round;
+import com.warren.tournament.entity1.Side;
+import com.warren.tournament.entity1.Tournament;
 import com.warren.tournament.enumerator.FormatBracket;
 import com.warren.tournament.enumerator.FormatRoundRobin;
 

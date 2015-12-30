@@ -2,8 +2,8 @@ package com.warren.tournament.service;
 
 import java.util.Comparator;
 
-import com.warren.tournament.entity.Side;
-import com.warren.tournament.entity.Tournament;
+import com.warren.tournament.entity1.Side;
+import com.warren.tournament.entity1.Tournament;
 import com.warren.tournament.service.builders.TournamentBuilderService;
 import com.warren.tournament.service.populators.TournamentPopulatorService;
 

@@ -4,8 +4,8 @@ import java.util.Comparator;
 import java.util.Set;
 
 import com.warren.tournament.api.BracketPopulator;
-import com.warren.tournament.entity.Bracket;
-import com.warren.tournament.entity.Player;
+import com.warren.tournament.entity1.Bracket;
+import com.warren.tournament.entity1.Player;
 import com.warren.tournament.enumerator.GameType;
 
 public class BasicBracketPopulator implements BracketPopulator {

@@ -1,22 +1,67 @@
 package com.warren.tournament.entity;
 
 import java.io.IOException;
+import java.io.Serializable;
+
+import javax.persistence.*;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.warren.tournament.entity.Match;
+import com.warren.tournament.entity.Side;
 import com.warren.tournament.util.CustomJsonSerializer;
 
-public class Game {
+import java.sql.Timestamp;
+
+
+/**
+ * The persistent class for the game database table.
+ * 
+ */
+@Entity
+@Table(name="game")
+@NamedQuery(name="Game.findAll", query="SELECT g FROM Game g")
+public class Game implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(unique=true, nullable=false)
 	private Integer id;
-	private Integer order;
-	private Match match;
-	private Integer winningScore;
+
+	@Column(nullable=false)
+	private Timestamp created;
+
+	@Column(name="losing_score")
 	private Integer losingScore;
-	private Side winningSide;
+
+	@Column(nullable=false)
+	private Integer order;
+
+	private Timestamp updated;
+
+	@Column(name="winning_score")
+	private Integer winningScore;
+
+	//bi-directional many-to-one association to Match
+	@ManyToOne
+	@JoinColumn(name="match_id", nullable=false)
+	private Match match;
+
+	//bi-directional many-to-one association to Side
+	@ManyToOne
+	@JoinColumn(name="losing_side_id")
 	private Side losingSide;
+
+	//bi-directional many-to-one association to Side
+	@ManyToOne
+	@JoinColumn(name="winning_side_id")
+	private Side winningSide;
+
+	public Game() { }
 	
 	public Game(Match match) {
 		this.match = match;
@@ -27,6 +72,7 @@ public class Game {
 			throw new IllegalArgumentException(
 					"Attempting to add a side score to a game where the side is not in the match: \n" + 
 					side + "\n match: " + match);
+			// TODO: put log statement here
 		}
 		
 		if(winningScore == null) {
@@ -54,35 +100,59 @@ public class Game {
 	}
 
 	public Integer getId() {
-		return id;
+		return this.id;
 	}
 	public void setId(Integer id) {
 		this.id = id;
 	}
+	public Timestamp getCreated() {
+		return this.created;
+	}
+	public void setCreated(Timestamp created) {
+		this.created = created;
+	}
+	public Integer getLosingScore() {
+		return this.losingScore;
+	}
+	public void setLosingScore(Integer losingScore) {
+		this.losingScore = losingScore;
+	}
 	public Integer getOrder() {
-		return order;
+		return this.order;
 	}
 	public void setOrder(Integer order) {
 		this.order = order;
 	}
+	public Timestamp getUpdated() {
+		return this.updated;
+	}
+	public void setUpdated(Timestamp updated) {
+		this.updated = updated;
+	}
+	public Integer getWinningScore() {
+		return this.winningScore;
+	}
+	public void setWinningScore(Integer winningScore) {
+		this.winningScore = winningScore;
+	}
 	@JsonSerialize(using=MatchFieldSerializer.class)
 	public Match getMatch() {
-		return match;
+		return this.match;
 	}
 	public void setMatch(Match match) {
 		this.match = match;
 	}
-	public Integer getWinningScore() {
-		return winningScore;
+	public Side getLosingSide() {
+		return this.losingSide;
 	}
-	public Integer getLosingScore() {
-		return losingScore;
+	public void setLosingSide(Side losingSide) {
+		this.losingSide = losingSide;
 	}
 	public Side getWinningSide() {
-		return winningSide;
+		return this.winningSide;
 	}
-	public Side getLosingSide() {
-		return losingSide;
+	public void setWinningSide(Side winningSide) {
+		this.winningSide = winningSide;
 	}
 
 	public boolean isComplete() {

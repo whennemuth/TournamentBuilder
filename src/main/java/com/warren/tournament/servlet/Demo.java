@@ -10,8 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.warren.tournament.entity.Player;
-import com.warren.tournament.entity.Tournament;
+import com.warren.tournament.entity1.Member;
+import com.warren.tournament.entity1.Player;
+import com.warren.tournament.entity1.Tournament;
 import com.warren.tournament.enumerator.FormatBracket;
 import com.warren.tournament.enumerator.GameType;
 import com.warren.tournament.enumerator.MatchingMethod;
@@ -63,11 +64,13 @@ public class Demo extends HttpServlet {
 		Set<Player> players = new HashSet<Player>();
 		
 		for(int i=0; i<playerCount; i++) {
+			Member m = new Member();
+			m.setEmail("player" + String.valueOf(i+1) + "@gmail.com");
+			m.setFname("fn" + String.valueOf(i+1));
+			m.setLname("ln" + String.valueOf(i+1));
+			m.setRank(i+1);
 			Player p = new Player();
-			p.setEmail("player" + String.valueOf(i+1) + "@gmail.com");
-			p.setFname("fn" + String.valueOf(i+1));
-			p.setLname("ln" + String.valueOf(i+1));
-			p.setRank(i+1);
+			p.setMember(m);
 			players.add(p);
 		}
 		

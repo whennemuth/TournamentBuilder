@@ -1,182 +1,168 @@
 package com.warren.tournament.entity;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.io.Serializable;
+
+import javax.persistence.*;
 
 import com.warren.tournament.enumerator.GameType;
-import com.warren.tournament.enumerator.MatchingMethod;
 
-public class Tournament {
+import java.sql.Timestamp;
+import java.util.List;
 
+
+/**
+ * The persistent class for the tournament database table.
+ * 
+ */
+@Entity
+@Table(name="tournament")
+@NamedQuery(name="Tournament.findAll", query="SELECT t FROM Tournament t")
+public class Tournament implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(unique=true, nullable=false)
 	private Integer id;
-	private List<Bracket> brackets = new ArrayList<Bracket>();
-	private Set<Player> players = new HashSet<Player>();
-	private GameType gameType;
-	private MatchingMethod matchingMethod;
-	private Enum<?> formatType;
-	private String format;
-	private Integer gamesPerMatch;
+
+	@Column(nullable=false)
 	private Timestamp created;
+
+	@Column(nullable=false, length=50)
+	private String format;
+
+	@Column(name="format_type", nullable=false, length=50)
+	private String formatType;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name="game_type", nullable=false, length=50)
+	private GameType gameType;
+
+	@Column(name="games_per_match", nullable=false)
+	private Integer gamesPerMatch;
+
+	@Column(name="matching_method", nullable=false, length=50)
+	private String matchingMethod;
+
 	private Timestamp updated;
-	
-	public Integer getId() {
-		return id;
+
+	//bi-directional many-to-one association to Bracket
+	@OneToMany(mappedBy="tournament")
+	private List<Bracket> brackets;
+
+	//bi-directional many-to-one association to Player
+	@OneToMany(mappedBy="tournament")
+	private List<Player> players;
+
+	public Tournament() {
 	}
+
+	public Integer getId() {
+		return this.id;
+	}
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public void addPlayer(Player player) {
-		players.add(player);
-	}
-	public void removePlayer(Player player) {
-		players.remove(player);
-	}
-	public void addBracket(Bracket bracket) {
-		brackets.add(bracket);
-		bracket.setTournament(this);
-	}
-	public void removeBracket(Bracket bracket) {
-		brackets.remove(bracket);
-		bracket.setTournament(null);
-	}
-	public List<Bracket> getBrackets() {
-		return brackets;
-	}
-	public void setBrackets(List<Bracket> brackets) {
-		this.brackets = brackets;
-	}
-	public Set<Player> getPlayers() {
-		return players;
-	}
-	public void setPlayers(Set<Player> players) {
-		this.players = players;
-	}
-	public Integer getGamesPerMatch() {
-		return gamesPerMatch;
-	}
-	public void setGamesPerMatch(Integer gamesPerMatch) {
-		this.gamesPerMatch = gamesPerMatch;
-	}
-	public GameType getGameType() {
-		return gameType;
-	}
-	public void setGameType(GameType gameType) {
-		this.gameType = gameType;
-	}
-	public MatchingMethod getMatchingMethod() {
-		return matchingMethod;
-	}
-	public void setMatchingMethod(MatchingMethod matchingMethod) {
-		this.matchingMethod = matchingMethod;
-	}
-	public Enum<?> getFormatType() {
-		return formatType;
-	}
-	public void setFormatType(Enum<?> formatType) {
-		this.formatType = formatType;
-		this.format = formatType.name();
-	}
-	public String getFormat() {
-		return this.formatType == null ? format : this.formatType.name();
-	}
-	public void setFormat(String format) {
-		this.format = format;
-	}
+
 	public Timestamp getCreated() {
-		if(created == null)
-			created = new Timestamp(System.currentTimeMillis());
-		return created;
+		return this.created;
 	}
+
 	public void setCreated(Timestamp created) {
 		this.created = created;
 	}
-	public Timestamp getUpdated() {
-		return updated;
+
+	public String getFormat() {
+		return this.format;
 	}
+
+	public void setFormat(String format) {
+		this.format = format;
+	}
+
+	public String getFormatType() {
+		return this.formatType;
+	}
+
+	public void setFormatType(String formatType) {
+		this.formatType = formatType;
+	}
+
+	public GameType getGameType() {
+		return this.gameType;
+	}
+
+	public void setGameType(GameType gameType) {
+		this.gameType = gameType;
+	}
+
+	public Integer getGamesPerMatch() {
+		return this.gamesPerMatch;
+	}
+
+	public void setGamesPerMatch(Integer gamesPerMatch) {
+		this.gamesPerMatch = gamesPerMatch;
+	}
+
+	public String getMatchingMethod() {
+		return this.matchingMethod;
+	}
+
+	public void setMatchingMethod(String matchingMethod) {
+		this.matchingMethod = matchingMethod;
+	}
+
+	public Timestamp getUpdated() {
+		return this.updated;
+	}
+
 	public void setUpdated(Timestamp updated) {
 		this.updated = updated;
 	}
-	public int getSideCount() {
-		int i = 0;
-		for(Bracket b : brackets) {
-			i += b.getSideCount();
-		}
-		return i;
+
+	public List<Bracket> getBrackets() {
+		return this.brackets;
 	}
-	public int getUnBuiltSideCount(GameType gameType) {
-		return gameType.getSidesPerGame( players.size()) - getSideCount();
+
+	public void setBrackets(List<Bracket> brackets) {
+		this.brackets = brackets;
 	}
-	public boolean isComplete() {
-		for(Bracket bracket: brackets) {
-			if(!bracket.isComplete())
-				return false;
-		}
-		return true;
+
+	public Bracket addBracket(Bracket bracket) {
+		getBrackets().add(bracket);
+		bracket.setTournament(this);
+
+		return bracket;
 	}
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Tournament [brackets=").append(brackets)
-				.append(", players=").append(players).append("]");
-		return builder.toString();
+
+	public Bracket removeBracket(Bracket bracket) {
+		getBrackets().remove(bracket);
+		bracket.setTournament(null);
+
+		return bracket;
 	}
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((created == null) ? 0 : created.hashCode());
-		result = prime * result + ((format == null) ? 0 : format.hashCode());
-		result = prime * result + ((formatType == null) ? 0 : formatType.hashCode());
-		result = prime * result + ((gameType == null) ? 0 : gameType.hashCode());
-		result = prime * result + ((gamesPerMatch == null) ? 0 : gamesPerMatch.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((matchingMethod == null) ? 0 : matchingMethod.hashCode());
-		result = prime * result + ((players == null) ? 0 : players.hashCode());
-		return result;
+
+	public List<Player> getPlayers() {
+		return this.players;
 	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Tournament other = (Tournament) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (created == null) {
-			if (other.created != null)
-				return false;
-		} else if (!created.equals(other.created))
-			return false;
-		if (format == null) {
-			if (other.format != null)
-				return false;
-		} else if (!format.equals(other.format))
-			return false;
-		if (formatType == null) {
-			if (other.formatType != null)
-				return false;
-		} else if (!formatType.equals(other.formatType))
-			return false;
-		if (gameType != other.gameType)
-			return false;
-		if (gamesPerMatch == null) {
-			if (other.gamesPerMatch != null)
-				return false;
-		} else if (!gamesPerMatch.equals(other.gamesPerMatch))
-			return false;
-		if (matchingMethod != other.matchingMethod)
-			return false;
-		return true;
+
+	public void setPlayers(List<Player> players) {
+		this.players = players;
 	}
-	
-	
+
+	public Player addPlayer(Player player) {
+		getPlayers().add(player);
+		player.setTournament(this);
+
+		return player;
+	}
+
+	public Player removePlayer(Player player) {
+		getPlayers().remove(player);
+		player.setTournament(null);
+
+		return player;
+	}
+
 }

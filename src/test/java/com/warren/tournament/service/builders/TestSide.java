@@ -15,12 +15,13 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.warren.tournament.entity.Bracket;
-import com.warren.tournament.entity.Match;
-import com.warren.tournament.entity.Player;
-import com.warren.tournament.entity.Round;
-import com.warren.tournament.entity.Side;
-import com.warren.tournament.entity.Tournament;
+import com.warren.tournament.entity1.Bracket;
+import com.warren.tournament.entity1.Match;
+import com.warren.tournament.entity1.Member;
+import com.warren.tournament.entity1.Player;
+import com.warren.tournament.entity1.Round;
+import com.warren.tournament.entity1.Side;
+import com.warren.tournament.entity1.Tournament;
 import com.warren.tournament.enumerator.GameType;
 import com.warren.tournament.util.PlayerMocks;
 
@@ -47,13 +48,21 @@ public class TestSide {
 		// Not using the player mocks because the equals method cannot be stubbed by mockito.
 		// These player instances will serve as mocks and will be considered equal based on the email address only (for simplicity)
 		Player player1 = new Player();
-		player1.setEmail("player1@gmail.com");
+		Member member1 = new Member();
+		member1.setEmail("player1@gmail.com");
+		player1.setMember(member1);
 		Player player2 = new Player();
-		player2.setEmail("player2@gmail.com");
+		Member member2 = new Member();
+		member2.setEmail("player2@gmail.com");
+		player2.setMember(member2);
 		Player player3 = new Player();
-		player3.setEmail("player3@gmail.com");
+		Member member3 = new Member();
+		member3.setEmail("player3@gmail.com");
+		player3.setMember(member3);
 		Player player4 = new Player();
-		player4.setEmail("player4@gmail.com");
+		Member member4 = new Member();
+		member4.setEmail("player4@gmail.com");
+		player4.setMember(member4);
 		
 		when(match1.getId()).thenReturn(null);
 		when(match2.getId()).thenReturn(null);
@@ -68,16 +77,16 @@ public class TestSide {
 		assertFalse(side1.equals(side2));
 		
 		// Both sides share one player in common, but that should not be enough for equality between sides.
-		player3.setEmail(player1.getEmail());
+		member3.setEmail(member1.getEmail());
 		assertFalse(side1.equals(side2));
 		
 		// Both sides have all players in common between them, so they both should be equal
-		player4.setEmail(player2.getEmail());
+		member4.setEmail(member2.getEmail());
 		assertTrue(side1.equals(side2));
 		
 		// Restore the emails
-		player3.setEmail("player3@gmail.com");
-		player4.setEmail("player4@gmail.com");
+		member3.setEmail("player3@gmail.com");
+		member4.setEmail("player4@gmail.com");
 		
 		// With players differing, two sides can only be equal if their matches both have ids and the ids are equal.
 		when(match1.getId()).thenReturn(1);

@@ -10,11 +10,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.warren.tournament.entity.Game;
-import com.warren.tournament.entity.Match;
-import com.warren.tournament.entity.Player;
-import com.warren.tournament.entity.Side;
-import com.warren.tournament.entity.Tournament;
+import com.warren.tournament.entity1.Game;
+import com.warren.tournament.entity1.Match;
+import com.warren.tournament.entity1.Player;
+import com.warren.tournament.entity1.Side;
+import com.warren.tournament.entity1.Tournament;
 import com.warren.tournament.enumerator.FormatBracket;
 import com.warren.tournament.enumerator.GameType;
 import com.warren.tournament.service.populators.TournamentPopulatorService;

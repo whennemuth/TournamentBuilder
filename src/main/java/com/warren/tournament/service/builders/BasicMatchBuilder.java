@@ -1,9 +1,9 @@
 package com.warren.tournament.service.builders;
 
 import com.warren.tournament.api.MatchBuilder;
-import com.warren.tournament.entity.Match;
-import com.warren.tournament.entity.Round;
-import com.warren.tournament.entity.Side;
+import com.warren.tournament.entity1.Match;
+import com.warren.tournament.entity1.Round;
+import com.warren.tournament.entity1.Side;
 import com.warren.tournament.enumerator.GameType;
 
 public class BasicMatchBuilder implements MatchBuilder {

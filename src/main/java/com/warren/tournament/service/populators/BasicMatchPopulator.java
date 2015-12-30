@@ -6,8 +6,8 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import com.warren.tournament.api.MatchPopulator;
-import com.warren.tournament.entity.Match;
-import com.warren.tournament.entity.Player;
+import com.warren.tournament.entity1.Match;
+import com.warren.tournament.entity1.Player;
 import com.warren.tournament.enumerator.GameType;
 
 public class BasicMatchPopulator implements MatchPopulator {
