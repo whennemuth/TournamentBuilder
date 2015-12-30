@@ -4,10 +4,16 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import com.warren.tournament.entity.Bracket;
+import com.warren.tournament.enumerator.FormatType;
 import com.warren.tournament.enumerator.GameType;
+import com.warren.tournament.enumerator.MatchingMethod;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -31,8 +37,9 @@ public class Tournament implements Serializable {
 	@Column(nullable=false, length=50)
 	private String format;
 
+	@Enumerated(EnumType.STRING)
 	@Column(name="format_type", nullable=false, length=50)
-	private String formatType;
+	private FormatType formatType;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name="game_type", nullable=false, length=50)
@@ -41,8 +48,9 @@ public class Tournament implements Serializable {
 	@Column(name="games_per_match", nullable=false)
 	private Integer gamesPerMatch;
 
+	@Enumerated(EnumType.STRING)
 	@Column(name="matching_method", nullable=false, length=50)
-	private String matchingMethod;
+	private MatchingMethod matchingMethod;
 
 	private Timestamp updated;
 
@@ -52,7 +60,7 @@ public class Tournament implements Serializable {
 
 	//bi-directional many-to-one association to Player
 	@OneToMany(mappedBy="tournament")
-	private List<Player> players;
+	private Set<Player> players;
 
 	public Tournament() {
 	}
@@ -81,11 +89,11 @@ public class Tournament implements Serializable {
 		this.format = format;
 	}
 
-	public String getFormatType() {
+	public FormatType getFormatType() {
 		return this.formatType;
 	}
 
-	public void setFormatType(String formatType) {
+	public void setFormatType(FormatType formatType) {
 		this.formatType = formatType;
 	}
 
@@ -105,11 +113,11 @@ public class Tournament implements Serializable {
 		this.gamesPerMatch = gamesPerMatch;
 	}
 
-	public String getMatchingMethod() {
+	public MatchingMethod getMatchingMethod() {
 		return this.matchingMethod;
 	}
 
-	public void setMatchingMethod(String matchingMethod) {
+	public void setMatchingMethod(MatchingMethod matchingMethod) {
 		this.matchingMethod = matchingMethod;
 	}
 
@@ -122,6 +130,8 @@ public class Tournament implements Serializable {
 	}
 
 	public List<Bracket> getBrackets() {
+		if(this.brackets == null)
+			this.brackets = new ArrayList<Bracket>();
 		return this.brackets;
 	}
 
@@ -143,11 +153,13 @@ public class Tournament implements Serializable {
 		return bracket;
 	}
 
-	public List<Player> getPlayers() {
+	public Set<Player> getPlayers() {
+		if(players == null)
+			players = new HashSet<Player>();
 		return this.players;
 	}
 
-	public void setPlayers(List<Player> players) {
+	public void setPlayers(Set<Player> players) {
 		this.players = players;
 	}
 
@@ -163,6 +175,84 @@ public class Tournament implements Serializable {
 		player.setTournament(null);
 
 		return player;
+	}
+	public int getSideCount() {
+		int i = 0;
+		for(Bracket b : brackets) {
+			i += b.getSideCount();
+		}
+		return i;
+	}
+	public int getUnBuiltSideCount(GameType gameType) {
+		return gameType.getSidesPerGame( players.size()) - getSideCount();
+	}
+	public boolean isComplete() {
+		for(Bracket bracket: brackets) {
+			if(!bracket.isComplete())
+				return false;
+		}
+		return true;
+	}
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Tournament [brackets=").append(brackets)
+				.append(", players=").append(players).append("]");
+		return builder.toString();
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((created == null) ? 0 : created.hashCode());
+		result = prime * result + ((format == null) ? 0 : format.hashCode());
+		result = prime * result + ((formatType == null) ? 0 : formatType.hashCode());
+		result = prime * result + ((gameType == null) ? 0 : gameType.hashCode());
+		result = prime * result + ((gamesPerMatch == null) ? 0 : gamesPerMatch.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((matchingMethod == null) ? 0 : matchingMethod.hashCode());
+		result = prime * result + ((players == null) ? 0 : players.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Tournament other = (Tournament) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (created == null) {
+			if (other.created != null)
+				return false;
+		} else if (!created.equals(other.created))
+			return false;
+		if (format == null) {
+			if (other.format != null)
+				return false;
+		} else if (!format.equals(other.format))
+			return false;
+		if (formatType == null) {
+			if (other.formatType != null)
+				return false;
+		} else if (!formatType.equals(other.formatType))
+			return false;
+		if (gameType != other.gameType)
+			return false;
+		if (gamesPerMatch == null) {
+			if (other.gamesPerMatch != null)
+				return false;
+		} else if (!gamesPerMatch.equals(other.gamesPerMatch))
+			return false;
+		if (matchingMethod != other.matchingMethod)
+			return false;
+		return true;
 	}
 
 }

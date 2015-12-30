@@ -10,10 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.warren.tournament.entity1.Member;
-import com.warren.tournament.entity1.Player;
-import com.warren.tournament.entity1.Tournament;
-import com.warren.tournament.enumerator.FormatBracket;
+import com.warren.tournament.entity.Member;
+import com.warren.tournament.entity.Player;
+import com.warren.tournament.entity.Tournament;
+import com.warren.tournament.enumerator.FormatType;
 import com.warren.tournament.enumerator.GameType;
 import com.warren.tournament.enumerator.MatchingMethod;
 import com.warren.tournament.service.TournamentParms;
@@ -75,7 +75,7 @@ public class Demo extends HttpServlet {
 		}
 		
 		TournamentParms parms = new TournamentParms();
-		parms.setFormat(FormatBracket.SINGLE_ELIMINATION);
+		parms.setFormat(FormatType.SINGLE_ELIMINATION);
 		parms.setGamesPerMatch(gamesPerMatch);
 		parms.setGameType(GameType.SINGLES);
 		parms.setMatchingMethod(MatchingMethod.HIGHEST_WITH_LOWEST_RANK);

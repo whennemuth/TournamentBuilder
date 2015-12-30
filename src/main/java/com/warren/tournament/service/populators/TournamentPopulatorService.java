@@ -4,20 +4,19 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.warren.tournament.entity1.Bracket;
-import com.warren.tournament.entity1.Match;
-import com.warren.tournament.entity1.Player;
-import com.warren.tournament.entity1.Round;
-import com.warren.tournament.entity1.Side;
-import com.warren.tournament.entity1.Tournament;
-import com.warren.tournament.enumerator.FormatBracket;
-import com.warren.tournament.enumerator.FormatRoundRobin;
+import com.warren.tournament.entity.Bracket;
+import com.warren.tournament.entity.Match;
+import com.warren.tournament.entity.Player;
+import com.warren.tournament.entity.Round;
+import com.warren.tournament.entity.Side;
+import com.warren.tournament.entity.Tournament;
+import com.warren.tournament.enumerator.FormatType;
 
 public class TournamentPopulatorService {
 
 	public boolean populateNextRound(Tournament tournament, Comparator<Side> sideComparator) {
 		
-		if(tournament.getFormatType().equals(FormatBracket.SINGLE_ELIMINATION)) {
+		if(tournament.getFormatType().equals(FormatType.SINGLE_ELIMINATION)) {
 			
 			// Create a Sortable set of sides that accounts for all players in the tournament.
 			// These sides can be sorted because they have players and the comparator can work off their combined ranks.
@@ -64,27 +63,27 @@ public class TournamentPopulatorService {
 				}
 			}
 		}
-		if(tournament.getFormatType().equals(FormatBracket.DOUBLE_ELIMINATION)) {
+		if(tournament.getFormatType().equals(FormatType.DOUBLE_ELIMINATION)) {
 		}
-		if(tournament.getFormatType().equals(FormatBracket.CLASSIC_PLATE_DROPDOWN)) {
+		if(tournament.getFormatType().equals(FormatType.CLASSIC_PLATE_DROPDOWN)) {
 		}
-		if(tournament.getFormatType().equals(FormatBracket.CONSOLATION)) {
+		if(tournament.getFormatType().equals(FormatType.CONSOLATION)) {
 		}
-		if(tournament.getFormatType().equals(FormatBracket.FEED_IN_DROPDOWN)) {
+		if(tournament.getFormatType().equals(FormatType.FEED_IN_DROPDOWN)) {
 		}
-		if(tournament.getFormatType().equals(FormatBracket.FEED_IN_WITH_CONSOLATION)) {
+		if(tournament.getFormatType().equals(FormatType.FEED_IN_WITH_CONSOLATION)) {
 		}
-		if(tournament.getFormatType().equals(FormatBracket.OLYMPIC_FORMAT_DIVISION)) {
+		if(tournament.getFormatType().equals(FormatType.OLYMPIC_FORMAT_DIVISION)) {
 		}
-		if(tournament.getFormatType().equals(FormatBracket.QUALIFIER_DRAW)) {
+		if(tournament.getFormatType().equals(FormatType.QUALIFIER_DRAW)) {
 		}
-		if(tournament.getFormatType().equals(FormatBracket.TRIPLE_KNOCKOUT)) {
+		if(tournament.getFormatType().equals(FormatType.TRIPLE_KNOCKOUT)) {
 		}
-		if(tournament.getFormatType().equals(FormatRoundRobin.ROUND_ROBIN)) {
+		if(tournament.getFormatType().equals(FormatType.ROUND_ROBIN)) {
 		}
-		if(tournament.getFormatType().equals(FormatRoundRobin.DOUBLE_ROUND_ROBIN)) {
+		if(tournament.getFormatType().equals(FormatType.DOUBLE_ROUND_ROBIN)) {
 		}
-		if(tournament.getFormatType().equals(FormatRoundRobin.TRIPLE_ROUND_ROBIN)) {
+		if(tournament.getFormatType().equals(FormatType.TRIPLE_ROUND_ROBIN)) {
 		}
 		
 		return false;

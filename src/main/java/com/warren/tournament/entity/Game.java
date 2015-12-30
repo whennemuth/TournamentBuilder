@@ -67,6 +67,7 @@ public class Game implements Serializable {
 		this.match = match;
 	}
 	
+	@Transient
 	public void addScore(Side side, Integer points) throws IllegalArgumentException {
 		if(!match.getSides().contains(side)) {
 			throw new IllegalArgumentException(
@@ -155,6 +156,7 @@ public class Game implements Serializable {
 		this.winningSide = winningSide;
 	}
 
+	@Transient
 	public boolean isComplete() {
 		return winningScore != null && losingScore != null;
 	}

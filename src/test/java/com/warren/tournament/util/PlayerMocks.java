@@ -7,8 +7,8 @@ import java.util.TreeSet;
 
 import org.mockito.Mockito;
 
-import com.warren.tournament.entity1.Member;
-import com.warren.tournament.entity1.Player;
+import com.warren.tournament.entity.Member;
+import com.warren.tournament.entity.Player;
 
 public class PlayerMocks {
 

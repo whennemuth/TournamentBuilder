@@ -1,6 +1,7 @@
 package com.warren.tournament.service.builders;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Comparator;
 import java.util.TreeSet;
@@ -10,12 +11,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.warren.tournament.entity1.Game;
-import com.warren.tournament.entity1.Match;
-import com.warren.tournament.entity1.Player;
-import com.warren.tournament.entity1.Side;
-import com.warren.tournament.entity1.Tournament;
-import com.warren.tournament.enumerator.FormatBracket;
+import com.warren.tournament.entity.Game;
+import com.warren.tournament.entity.Match;
+import com.warren.tournament.entity.Player;
+import com.warren.tournament.entity.Side;
+import com.warren.tournament.entity.Tournament;
+import com.warren.tournament.enumerator.FormatType;
 import com.warren.tournament.enumerator.GameType;
 import com.warren.tournament.service.populators.TournamentPopulatorService;
 import com.warren.tournament.util.PlayerMocks;
@@ -52,7 +53,7 @@ public class TestTournamentPopulatorService {
 	@Test
 	public void testPopulateNextRound() {
 		builder = new TournamentBuilderService();
-		tournament = builder.buildTournament(FormatBracket.SINGLE_ELIMINATION, GameType.SINGLES, playerMocks);
+		tournament = builder.buildTournament(FormatType.SINGLE_ELIMINATION, GameType.SINGLES, playerMocks);
 		tournament.setGamesPerMatch(3);
 		svc = new TournamentPopulatorService();
 		

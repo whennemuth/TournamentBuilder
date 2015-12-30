@@ -2,8 +2,8 @@ package com.warren.tournament.service;
 
 import java.util.Comparator;
 
-import com.warren.tournament.entity1.Side;
-import com.warren.tournament.entity1.Tournament;
+import com.warren.tournament.entity.Side;
+import com.warren.tournament.entity.Tournament;
 import com.warren.tournament.service.builders.TournamentBuilderService;
 import com.warren.tournament.service.populators.TournamentPopulatorService;
 
@@ -31,9 +31,27 @@ public class TournamentService {
 			break;
 		case HIGHEST_WITH_LOWEST_RANK:
 			comparator = new Comparator<Side>() {
+				/**
+				 * Sides will be sorted by rank. If ranks are equal, then comparing the two sides would return zero.
+				 * This is to be avoided because the TreeSet would consider the two sides equal and where the comparison is 
+				 * triggered through the add method the set would not allow such a side to be added because this would 
+				 * violate the uniqueness of the set. Therefore 1 is returned in case of zero. 
+				 */
 				public int compare(Side side1, Side side2) {
 					try {
-						return side1.getRank().compareTo(side2.getRank());
+						int retval = 0;
+						
+						if(side1.getRank() == null) {
+							if(side2.getRank() != null)
+								retval = 1;
+						}
+						else if(side2.getRank() == null)
+							retval = -1;
+						else
+							retval = side1.getRank().compareTo(side2.getRank());
+						// Have exhausted all basis for comparison, so arbitrarily assign a non-zero value
+						return retval == 0 ? 1 : retval;
+							
 					} 
 					catch (Exception e) {
 						return 0;

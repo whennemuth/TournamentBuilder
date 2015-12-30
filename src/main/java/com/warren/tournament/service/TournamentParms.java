@@ -2,21 +2,22 @@ package com.warren.tournament.service;
 
 import java.util.Set;
 
-import com.warren.tournament.entity1.Player;
+import com.warren.tournament.entity.Player;
+import com.warren.tournament.enumerator.FormatType;
 import com.warren.tournament.enumerator.GameType;
 import com.warren.tournament.enumerator.MatchingMethod;
 
 public class TournamentParms {
-	private Enum<?> format;
+	private FormatType format;
 	private GameType gameType;
 	private MatchingMethod matchingMethod; 
 	private Set<Player> players;
 	private Integer gamesPerMatch;
 	
-	public Enum<?> getFormat() {
+	public FormatType getFormat() {
 		return format;
 	}
-	public void setFormat(Enum<?> format) {
+	public void setFormat(FormatType format) {
 		this.format = format;
 	}
 	public GameType getGameType() {

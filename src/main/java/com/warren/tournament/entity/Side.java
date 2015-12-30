@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.warren.tournament.entity.Match;
 import com.warren.tournament.entity.Player;
 import com.warren.tournament.entity.Side;
@@ -145,6 +146,8 @@ public class Side implements Serializable {
 	}
 
 	public List<Game> getLosingGames() {
+		if(losingGames == null)
+			losingGames = new ArrayList<Game>();
 		return this.losingGames;
 	}
 
@@ -167,6 +170,8 @@ public class Side implements Serializable {
 	}
 
 	public List<Game> getWinningGames() {
+		if(this.winningGames == null)
+			this.winningGames = new ArrayList<Game>();
 		return this.winningGames;
 	}
 
@@ -188,6 +193,7 @@ public class Side implements Serializable {
 		return winningGames;
 	}
 
+	@JsonSerialize(using=MatchFieldSerializer.class)
 	public Match getMatch() {
 		return this.match;
 	}
@@ -197,6 +203,8 @@ public class Side implements Serializable {
 	}
 
 	public Set<SidePlayer> getSidePlayers() {
+		if(this.sidePlayers == null)
+			this.sidePlayers = new HashSet<SidePlayer>();
 		return this.sidePlayers;
 	}
 
@@ -211,6 +219,7 @@ public class Side implements Serializable {
 		return sidePlayer;
 	}
 
+	@JsonSerialize(using=SideFieldSerializer.class)
 	public Side getThisSide() {
 		return this.thisSide;
 	}
@@ -219,6 +228,7 @@ public class Side implements Serializable {
 		this.thisSide = side;
 	}
 
+	@JsonSerialize(using=SideFieldsSerializer.class)
 	public Set<Side> getOpposingSides() {
 		if(this.opposingSides == null)
 			this.opposingSides = new HashSet<Side>();
@@ -241,16 +251,16 @@ public class Side implements Serializable {
 		return side;
 	}
 
+	@Transient
 	public Set<Player> getPlayers() {
-		if(sidePlayers == null)
-			return null;
 		Set<Player> players = new HashSet<Player>();
-		for(SidePlayer sp : sidePlayers) {
+		for(SidePlayer sp : getSidePlayers()) {
 			if(sp.getPlayer() != null)
 				players.add(sp.getPlayer());
 		}
 		return players;
 	}
+	@Transient
 	public void setPlayers(Set<Player> players) {
 		if(players == null || players.isEmpty())
 			return;
@@ -259,17 +269,16 @@ public class Side implements Serializable {
 			addPlayer(player);
 		}
 	}
+	@Transient
 	public void addPlayer(Player player) {
 		if(player == null)
 			return;
-		if(sidePlayers == null)
-			sidePlayers = new HashSet<SidePlayer>();
 		
 		SidePlayer sidePlayer = new SidePlayer();
 		sidePlayer.setSide(this);
 		sidePlayer.setPlayer(player);
-		if(!sidePlayers.contains(sidePlayer)) {
-			sidePlayers.add(sidePlayer);
+		if(!getSidePlayers().contains(sidePlayer)) {
+			getSidePlayers().add(sidePlayer);
 		}
 	}
 
@@ -289,13 +298,23 @@ public class Side implements Serializable {
 		}
 	}
 
-	public static class SideFieldSerializer extends JsonSerializer<Set<Side>> {
+	public static class SideFieldsSerializer extends JsonSerializer<Set<Side>> {
 		@Override public void serialize(
 				Set<Side> sides, 
 				JsonGenerator generator, 
 				SerializerProvider provider) throws IOException, JsonProcessingException {
 			
 			(new CustomJsonSerializer<Set<Side>>()).serialize(sides, generator, provider);
+		}
+	}
+
+	public static class SideFieldSerializer extends JsonSerializer<Side> {
+		@Override public void serialize(
+				Side side, 
+				JsonGenerator generator, 
+				SerializerProvider provider) throws IOException, JsonProcessingException {
+			
+			(new CustomJsonSerializer<Side>()).serialize(side, generator, provider);
 		}
 	}
 	
@@ -307,17 +326,17 @@ public class Side implements Serializable {
 		return builder.toString();
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((created == null) ? 0 : created.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((match == null) ? 0 : match.hashCode());
-		result = prime * result + ((getPlayers() == null) ? 0 : getPlayers().hashCode());
-		result = prime * result + ((rank == null) ? 0 : rank.hashCode());
-		return result;
-	}
+//	@Override
+//	public int hashCode() {
+//		final int prime = 31;
+//		int result = 1;
+//		result = prime * result + ((created == null) ? 0 : created.hashCode());
+//		result = prime * result + ((id == null) ? 0 : id.hashCode());
+//		result = prime * result + ((match == null) ? 0 : match.hashCode());
+//		result = prime * result + ((getPlayers() == null) ? 0 : getPlayers().hashCode());
+//		result = prime * result + ((rank == null) ? 0 : rank.hashCode());
+//		return result;
+//	}
 
 	@Override
 	public boolean equals(Object obj) {

@@ -2,8 +2,8 @@ package com.warren.tournament.api;
 
 import java.util.List;
 
-import com.warren.tournament.entity1.Match;
-import com.warren.tournament.entity1.Player;
+import com.warren.tournament.entity.Match;
+import com.warren.tournament.entity.Player;
 import com.warren.tournament.enumerator.GameType;
 
 public interface MatchPopulator {

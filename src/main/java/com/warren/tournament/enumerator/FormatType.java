@@ -5,8 +5,7 @@ package com.warren.tournament.enumerator;
  * @author Warren
  *
  */
-public enum FormatBracket {
-
+public enum FormatType {
 	SINGLE_ELIMINATION("Single Elimination"),
 	DOUBLE_ELIMINATION("Double Elimination"),
 	CONSOLATION("Consolation"),
@@ -15,14 +14,18 @@ public enum FormatBracket {
 	FEED_IN_WITH_CONSOLATION("Feed-In with Consolation"),
 	CLASSIC_PLATE_DROPDOWN("Classic Plate Dropdown"),
 	OLYMPIC_FORMAT_DIVISION("Olympic Format Division"),
-	QUALIFIER_DRAW("Qualifier Draw");
+	QUALIFIER_DRAW("Qualifier Draw"),
+	
+	ROUND_ROBIN("Round Robin"),
+	DOUBLE_ROUND_ROBIN("Double Round Robin"),
+	TRIPLE_ROUND_ROBIN("Triple Round Robin");
 	
 	private String description;
-	private FormatBracket(String description) {
+	private FormatType(String description) {
 		this.description = description;
 	}
 	public String getDescription() {
 		return description;
 	}
-	
+
 }

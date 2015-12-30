@@ -11,9 +11,9 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.warren.tournament.api.MatchBuilder;
-import com.warren.tournament.entity1.Bracket;
-import com.warren.tournament.entity1.Match;
-import com.warren.tournament.entity1.Round;
+import com.warren.tournament.entity.Bracket;
+import com.warren.tournament.entity.Match;
+import com.warren.tournament.entity.Round;
 import com.warren.tournament.enumerator.GameType;
 import com.warren.tournament.service.builders.BasicRoundBuilder;
 

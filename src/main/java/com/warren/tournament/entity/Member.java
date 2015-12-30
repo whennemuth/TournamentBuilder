@@ -1,7 +1,11 @@
 package com.warren.tournament.entity;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
+import com.warren.tournament.entity.Member;
+
 import java.util.Date;
 import java.sql.Timestamp;
 import java.util.List;
@@ -209,6 +213,80 @@ public class Member implements Serializable {
 		player.setMember(null);
 
 		return player;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Member [id=").append(id).append(", fname=")
+				.append(fname).append(", lname=").append(lname)
+				.append(", dob=").append(dob).append(", phone1=")
+				.append(phone1).append(", phone2=").append(phone2)
+				.append(", address1=").append(address1).append(", address2=")
+				.append(address2).append(", city=").append(city)
+				.append(", state=").append(state).append(", zip=").append(zip)
+				.append(", rank=").append(rank).append(", email=")
+				.append(email).append(", created=").append(created)
+				.append(", updated=").append(updated).append("]");
+		return builder.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((address1 == null) ? 0 : address1.hashCode());
+		result = prime * result
+				+ ((address2 == null) ? 0 : address2.hashCode());
+		result = prime * result + ((city == null) ? 0 : city.hashCode());
+		result = prime * result + ((dob == null) ? 0 : dob.hashCode());
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result + ((fname == null) ? 0 : fname.hashCode());
+		result = prime * result + ((lname == null) ? 0 : lname.hashCode());
+		result = prime * result + ((rank == null) ? 0 : rank.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Member other = (Member) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if(dob == null) {
+			if(other.dob != null)
+				return false;
+		} else if(!dob.equals(other.dob))
+			return false;
+		if (email == null) {
+			if (other.email != null)
+				return false;
+		} else if (!email.equals(other.email))
+			return false;
+		if (rank == null) {
+			if (other.rank != null)
+				return false;
+		} else if (!rank.equals(other.rank))
+			return false;
+		if (fname == null) {
+			if (other.fname != null)
+				return false;
+		} else if (!fname.equals(other.fname))
+			return false;
+		if (lname == null) {
+			if (other.lname != null)
+				return false;
+		} else if (!lname.equals(other.lname))
+			return false;
+		return true;
 	}
 
 }

@@ -9,9 +9,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.warren.tournament.entity1.Player;
-import com.warren.tournament.entity1.Tournament;
-import com.warren.tournament.enumerator.FormatBracket;
+import com.warren.tournament.entity.Player;
+import com.warren.tournament.entity.Tournament;
+import com.warren.tournament.enumerator.FormatType;
 import com.warren.tournament.enumerator.GameType;
 import com.warren.tournament.util.PlayerMocks;
 
@@ -30,7 +30,7 @@ public class TestTournamentBuilderService {
 	@Test
 	public void testBuildTournament() {
 		svc = new TournamentBuilderService();
-		Tournament t = svc.buildTournament(FormatBracket.SINGLE_ELIMINATION, GameType.SINGLES, playerMocks);
+		Tournament t = svc.buildTournament(FormatType.SINGLE_ELIMINATION, GameType.SINGLES, playerMocks);
 		assertEquals(1, t.getBrackets().size());
 		System.out.println(t);
 	}
