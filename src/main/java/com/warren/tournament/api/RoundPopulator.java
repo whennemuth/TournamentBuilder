@@ -1,11 +1,10 @@
 package com.warren.tournament.api;
 
-import java.util.Set;
+import java.util.TreeSet;
 
-import com.warren.tournament.entity.Player;
 import com.warren.tournament.entity.Round;
-import com.warren.tournament.enumerator.GameType;
+import com.warren.tournament.entity.Side;
 
 public interface RoundPopulator {
-	public void populate(Round round, GameType gameType, Set<Player> unassigned);
+	public boolean populate(Round round, TreeSet<Side> unassignedSides);
 }

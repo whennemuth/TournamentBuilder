@@ -2,20 +2,24 @@ package com.warren.tournament.entity;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.Timestamp;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.warren.tournament.entity.SidePlayer;
-import com.warren.tournament.entity.Side.SideFieldSerializer;
 import com.warren.tournament.util.CustomJsonSerializer;
-
-import java.sql.Timestamp;
-import java.util.Set;
 
 
 /**

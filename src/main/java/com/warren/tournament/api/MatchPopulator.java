@@ -1,11 +1,10 @@
 package com.warren.tournament.api;
 
-import java.util.List;
+import java.util.TreeSet;
 
 import com.warren.tournament.entity.Match;
-import com.warren.tournament.entity.Player;
-import com.warren.tournament.enumerator.GameType;
+import com.warren.tournament.entity.Side;
 
 public interface MatchPopulator {
-	public void populate(Match match, GameType gameType, List<Player> unassigned);
+	public void populate(Match match, TreeSet<Side> unassignedSides);
 }

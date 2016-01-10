@@ -42,6 +42,8 @@ public class Side implements Serializable {
 	private Timestamp created;
 
 	private Float rank;
+	
+	private Integer sortOrder;
 
 	private Timestamp updated;
 
@@ -135,6 +137,20 @@ public class Side implements Serializable {
 
 	public void setRank(Float rank) {
 		this.rank = rank;
+	}
+
+	@Transient
+	public Integer getSortOrder() {
+		return sortOrder;
+	}
+
+	/**
+	 * Used so that sorted collections of Side instances can use a comparator that references this value to sort against.
+	 * @param sortOrder
+	 */
+	@Transient
+	public void setSortOrder(Integer sortOrder) {
+		this.sortOrder = sortOrder;
 	}
 
 	public Timestamp getUpdated() {

@@ -1,4 +1,4 @@
-package com.warren.tournament.service.builders;
+package com.warren.tournament.entity;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

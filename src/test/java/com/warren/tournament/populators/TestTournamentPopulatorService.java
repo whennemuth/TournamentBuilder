@@ -1,9 +1,10 @@
-package com.warren.tournament.service.builders;
+package com.warren.tournament.populators;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Comparator;
+import java.util.Set;
 import java.util.TreeSet;
 
 import org.junit.Before;
@@ -11,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.warren.tournament.api.SideSorter;
 import com.warren.tournament.entity.Game;
 import com.warren.tournament.entity.Match;
 import com.warren.tournament.entity.Player;
@@ -18,6 +20,8 @@ import com.warren.tournament.entity.Side;
 import com.warren.tournament.entity.Tournament;
 import com.warren.tournament.enumerator.FormatType;
 import com.warren.tournament.enumerator.GameType;
+import com.warren.tournament.service.builders.TournamentBuilderService;
+import com.warren.tournament.service.populators.SideComparator;
 import com.warren.tournament.service.populators.TournamentPopulatorService;
 import com.warren.tournament.util.PlayerMocks;
 
@@ -29,21 +33,16 @@ public class TestTournamentPopulatorService {
 	private TreeSet<Player> playerMocks;
 	private Tournament tournament;
 	private Comparator<Side> sideComparator;
+	private SideSorter sideSorter;
 
 	@Before
 	public void setUp() throws Exception {
-		// Build a set of 10 Mock players and make the tournament mock return them from the corresponding getter.
-		playerMocks = PlayerMocks.getPlayerMocks(10);
-		sideComparator = new Comparator<Side>() {
-			public int compare(Side side1, Side side2) {
-				try {
-					return side1.getRank().compareTo(side2.getRank());
-				} 
-				catch (Exception e) {
-					return 0;
-				}
-			}
-		};	
+		sideComparator = SideComparator.getInstance("rank", Float.class);
+		sideSorter = new SideSorter() {
+			@Override public Set<Side> setSortOrderValues(Set<Side> unassignedSides) {
+				return unassignedSides; // Don't actually apply any sort values.
+			}};
+		sideSorter.setComparator(sideComparator);
 	}
 
 	/**
@@ -51,17 +50,19 @@ public class TestTournamentPopulatorService {
 	 * about whether or not the round is finished and finally that the bracket is finished.
 	 */
 	@Test
-	public void testPopulateNextRound() {
+	public void testPopulateNextRound_SingleElimination_Singles() {
+		playerMocks = PlayerMocks.getPlayerMocks(10);
 		builder = new TournamentBuilderService();
 		tournament = builder.buildTournament(FormatType.SINGLE_ELIMINATION, GameType.SINGLES, playerMocks);
 		tournament.setGamesPerMatch(3);
 		svc = new TournamentPopulatorService();
-		
+				
 		// Should always be able to populate the first round for the first time.
-		boolean retval = svc.populateNextRound(tournament, sideComparator);
+		boolean retval = svc.populateNextRound(tournament, sideSorter);
 		assertTrue(retval);
+		
 		// Now the first round should not be populatable if no game activity has occurred.
-		retval = svc.populateNextRound(tournament, sideComparator);
+		retval = svc.populateNextRound(tournament, sideSorter);
 		assertFalse(retval);
 		
 		// Add games for first match, first round
@@ -162,17 +163,93 @@ public class TestTournamentPopulatorService {
 		assertNextGame(27, 3, 0, 3, false);
 		assertNextGameScore(3, 0, 0, 11, 9, false);
 	}
+	
+	//@Test
+	public void testPopulateNextRound_SingleElimination_Doubles() {
+		playerMocks = PlayerMocks.getPlayerMocks(20);
+		builder = new TournamentBuilderService();
+		tournament = builder.buildTournament(FormatType.SINGLE_ELIMINATION, GameType.DOUBLES, playerMocks);
+		tournament.setGamesPerMatch(3);
+		svc = new TournamentPopulatorService();
+		
+		// TODO: finish this
+	}
+	
+	//@Test
+	public void testPopulateNextRound_SingleElimination_Cutthroat() {
+		playerMocks = PlayerMocks.getPlayerMocks(15);
+		builder = new TournamentBuilderService();
+		tournament = builder.buildTournament(FormatType.SINGLE_ELIMINATION, GameType.CUTTHROAT, playerMocks);
+		tournament.setGamesPerMatch(3);
+		svc = new TournamentPopulatorService();
+		
+		// TODO: finish this
+	}
+	
+	//@Test
+	public void testPopulateNextRound_DoubleElimination_Singles() {
+		playerMocks = PlayerMocks.getPlayerMocks(10);
+		builder = new TournamentBuilderService();
+		tournament = builder.buildTournament(FormatType.SINGLE_ELIMINATION, GameType.DOUBLES, playerMocks);
+		tournament.setGamesPerMatch(3);
+		svc = new TournamentPopulatorService();
+		
+		// TODO: finish this
+	}
+	
+	//@Test
+	public void testPopulateNextRound_DoubleElimination_Doubles() {
+		playerMocks = PlayerMocks.getPlayerMocks(15);
+		builder = new TournamentBuilderService();
+		tournament = builder.buildTournament(FormatType.SINGLE_ELIMINATION, GameType.CUTTHROAT, playerMocks);
+		tournament.setGamesPerMatch(3);
+		svc = new TournamentPopulatorService();
+		
+		// TODO: finish this
+	}
+	
+	//@Test
+	public void testPopulateNextRound_DoubleElimination_Cutthroat() {
+		playerMocks = PlayerMocks.getPlayerMocks(20);
+		builder = new TournamentBuilderService();
+		tournament = builder.buildTournament(FormatType.SINGLE_ELIMINATION, GameType.CUTTHROAT, playerMocks);
+		tournament.setGamesPerMatch(3);
+		svc = new TournamentPopulatorService();
+		
+		// TODO: finish this
+	}
 
+	/**
+	 * Add games to a specified match. The games will not have scores, which indicates the games have not started yet.
+	 * Make the specified assertion after this is done.
+	 * 
+	 * @param gameId
+	 * @param roundIdx
+	 * @param matchIdx
+	 * @param order
+	 * @param assertTrue
+	 */
 	private void assertNextGame(int gameId, int roundIdx, int matchIdx, int order, boolean assertTrue) {
 		Match match = tournament.getBrackets().get(0).getRounds().get(roundIdx).getMatches().get(matchIdx);
 		Game game = new Game(match);
 		game.setId(gameId);
 		game.setOrder(order);
 		match.addGame(game);
-		boolean retval = svc.populateNextRound(tournament, sideComparator);
+		boolean retval = svc.populateNextRound(tournament, sideSorter);
 		assertTrue(assertTrue ? retval : !retval);
 	}
 	
+	/**
+	 * Games have already been added to the specified match, so now add scores to a specified game in that match.
+	 * Make the specified assertion after this is done.
+	 * 
+	 * @param roundIdx
+	 * @param matchIdx
+	 * @param gameIdx
+	 * @param score1
+	 * @param score2
+	 * @param assertTrue
+	 */
 	private void assertNextGameScore(int roundIdx, int matchIdx, int gameIdx, int score1, int score2, boolean assertTrue) {
 		Match match = tournament.getBrackets().get(0).getRounds().get(roundIdx).getMatches().get(matchIdx);
 		Game game = match.getGames().get(gameIdx);
@@ -180,7 +257,7 @@ public class TestTournamentPopulatorService {
 		Side side2 = match.getSides().get(1);
 		game.addScore(side1, score1);
 		game.addScore(side2, score2);
-		boolean retval = svc.populateNextRound(tournament, sideComparator);
+		boolean retval = svc.populateNextRound(tournament, sideSorter);
 		assertTrue(assertTrue ? retval : !retval);
 	}
 }

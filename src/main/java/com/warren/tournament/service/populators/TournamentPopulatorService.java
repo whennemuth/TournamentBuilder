@@ -1,15 +1,13 @@
 package com.warren.tournament.service.populators;
 
-import java.util.Comparator;
-
+import com.warren.tournament.api.SideSorter;
 import com.warren.tournament.entity.Bracket;
-import com.warren.tournament.entity.Side;
 import com.warren.tournament.entity.Tournament;
 import com.warren.tournament.enumerator.FormatType.Orientation;
 
 public class TournamentPopulatorService {
 
-	public boolean populateNextRound(Tournament tournament, Comparator<Side> sideComparator) {
+	public boolean populateNextRound(Tournament tournament, SideSorter sideSorter) {
 		
 		Orientation orientation = tournament.getFormatType().getOrientation();
 		boolean populated = false;
@@ -18,7 +16,7 @@ public class TournamentPopulatorService {
 		case BRACKET:
 			BasicBracketPopulator populator = new BasicBracketPopulator();
 			for(Bracket bracket : tournament.getBrackets()) {
-				populated |= populator.populate(bracket, sideComparator);
+				populated |= populator.populate(bracket, sideSorter);
 			}
 			break;
 		case ROUND_ROBIN:
