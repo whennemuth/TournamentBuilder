@@ -35,6 +35,8 @@ public class Utils {
 	}
 	
 	public static String stackTraceToString(Throwable e) {
+		if(e == null)
+			return null;
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 		e.printStackTrace(pw);

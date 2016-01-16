@@ -1,5 +1,7 @@
 package com.warren.tournament.enumerator;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 /**
  * A matching method is meant how are two players selected to play each other in a match.
  * For example, the goal of one matching method might be to optimize the chances that the two best players eventually
@@ -9,6 +11,7 @@ package com.warren.tournament.enumerator;
  * @author Warren
  *
  */
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum MatchingMethod {
 	HIGHEST_WITH_LOWEST_RANK(
 			"HighLow",
@@ -31,6 +34,9 @@ public enum MatchingMethod {
 	}
 	public String getName() {
 		return name;
+	}
+	public String getValue() {
+		return this.name();
 	}
 	public String getDescription() {
 		return description;

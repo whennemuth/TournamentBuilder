@@ -1,13 +1,6 @@
 package com.warren.tournament.launch;
 
-import com.warren.tournament.servlet.Demo;
-import org.eclipse.jetty.server.Connector;
-import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.ServerConnector;
-import org.eclipse.jetty.server.handler.DefaultHandler;
-import org.eclipse.jetty.server.handler.HandlerCollection;
-import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 /**
@@ -23,20 +16,6 @@ public class Launch {
     private static WebAppContext root;		// Jetty 
 	
 	public static void startWebServer() throws Exception {
-//        Server server = new Server();
-//        ServerConnector connector = new ServerConnector(server);
-//        connector.setPort(8080);
-//        server.setConnectors(new Connector[] { connector });
-//        ServletContextHandler context = new ServletContextHandler();
-//        context.setContextPath("/");
-//        context.addServlet(Demo.class, "/demo.htm");
-//        HandlerCollection handlers = new HandlerCollection();
-//        handlers.setHandlers(new Handler[] { context, new DefaultHandler() });
-//        server.setHandler(handlers);
-//        server.start();
-//        server.join();
-//        if(true)
-//        	return;
 
     	String webappDirLocation = "src/main/webapp/";
         // The port that we should run on can be set into an environment variable
@@ -51,8 +30,6 @@ public class Launch {
         root.setContextPath("/");
         root.setDescriptor(webappDirLocation + "/WEB-INF/web.xml");
         root.setResourceBase(webappDirLocation);
-        root.setCopyWebDir(true);
-        root.setCopyWebInf(true);
 
         // Parent loader priority is a class loader setting that Jetty accepts.
         // By default Jetty will behave like most web containers in that it will

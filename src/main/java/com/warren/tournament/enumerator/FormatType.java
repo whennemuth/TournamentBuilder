@@ -1,10 +1,13 @@
 package com.warren.tournament.enumerator;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 /**
  * http://www.r2sports.com/bracket-formats.asp
  * @author Warren
  *
  */
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum FormatType {
 	SINGLE_ELIMINATION("Single Elimination", Orientation.BRACKET),
 	DOUBLE_ELIMINATION("Double Elimination", Orientation.BRACKET),
@@ -31,8 +34,12 @@ public enum FormatType {
 	}
 	public Orientation getOrientation() {
 		return orientation;
-	}
-
+	}	
+    public final String getName() {
+        return this.name();
+    }
+    
+    @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 	public static enum Orientation {
 		BRACKET("Elimination Brackets"),
 		ROUND_ROBIN("Round Robin"),
@@ -46,5 +53,8 @@ public enum FormatType {
 		public String getDescription() {
 			return this.description;
 		}
+	    public final String getName() {
+	        return this.name();
+	    }
 	}
 }
