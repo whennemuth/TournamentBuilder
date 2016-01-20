@@ -1,9 +1,10 @@
 
 var tournamentCrudProvider = function() {
 	
-	//var url = '/tournament/ws/rest/tournament/demo';
-	var _url = '';
+	// Set the default url
+	var _url = '/tournament/ws/rest/tournament/demo';
 	
+	// Override the default url with a specific url
 	this.setUrl = function(url) {
 		_url = url;
 	};
@@ -33,5 +34,6 @@ var tournamentCrudProvider = function() {
 				return deferred.promise;
 			}
 		};
+		return null;
 	};
 };

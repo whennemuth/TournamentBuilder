@@ -94,12 +94,15 @@
 	</div>
 	
 	<script>
+		var CRUD_SVC_URL = '/tournament/ws/rest/tournament/demo';
+		var SETUP_SVC_URL = CRUD_SVC_URL + '/parms';
+		
 		var app = angular.module("tournamentApp", []);
 		
 		app.controller("tournamentController", function($scope, setupService, crudService, utilsService) {
 
 			// Get an ajax promise for the model (dropdown options) and their default selections.
-			setupService.setUrl('/tournament/ws/rest/tournament/demo/parms');
+			setupService.setUrl(SETUP_SVC_URL);
 			setupService.getModelOptions().then(
 				function(options){
 					$scope.model = options;
@@ -124,12 +127,13 @@
 		});
 
 		// Setup injection for the various services.
-		app.factory("setupService", tournamentSetupFactory);
-		app.provider("crudService", tournamentCrudProvider);
-		app.config(function(crudService){
-			crudProvider.setUrl('/tournament/ws/rest/tournament/demo');
-		});
 		app.factory("utilsService", tournamentUtilsFactory);
+		app.factory("setupService", tournamentSetupFactory);
+		// There is no reason to use a provider here instead of a factory. Just trying new things out.
+		app.provider("crudService", tournamentCrudProvider);
+		app.config(function(crudServiceProvider){
+			crudServiceProvider.setUrl(CRUD_SVC_URL);
+		});
 
 	</script>
 </body>

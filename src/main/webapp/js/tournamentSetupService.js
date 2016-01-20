@@ -1,9 +1,11 @@
 
 var tournamentSetupFactory = function($http, $q, utilsService) {
 	
-	var _url = '';
+	// Set the default url
+	var _url = '/tournament/ws/rest/tournament/demo/parms';
 	
 	return {
+		// Override the default url with a specific url
 		setUrl : function(url) {
 			_url = url;
 		},
