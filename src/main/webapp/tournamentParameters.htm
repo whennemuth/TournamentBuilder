@@ -1,0 +1,80 @@
+		<form name="tmtfrm" action="" method="post" novalidate>
+			<div class=inputlabel>Tournament Format</div>
+			<div class=inputwrapper>
+				<select 
+					required 
+					name="format" 
+					ng-model="tournamentParms.format" 
+					ng-options="format.description 
+								group by format.orientation.description 
+								for format in model.formatTypes 
+								track by format.name">
+						<option value=""><- Select One -></option>
+				</select>
+			</div>
+			<div class=inputlabel>Game Type</div>
+			<div class=inputwrapper>
+				<select 
+					required 
+					name="gameType" 
+					ng-model="tournamentParms.gameType" 
+					ng-options="gameType.description 
+								for gameType in model.gameTypes 
+								track by gameType.name">
+						<option value=""><- Select One -></option>
+				</select>
+			</div>
+			<div class=inputlabel>Matching Method</div>
+			<div class=inputwrapper>
+				<select 
+					required 
+					name="matchingMethod" 
+					ng-model="tournamentParms.matchingMethod" 
+					ng-options="matchingMethod.description 
+								group by matchingMethod.name 
+								for matchingMethod in model.matchingMethods 
+								track by matchingMethod.value">
+						<option value=""><- Select One -></option>
+				</select>
+			</div>
+			<div class=inputlabel>Games Per Match</div>
+			<div class=inputwrapper>
+				<select 
+					required 
+					name="gamesPerMatch" 
+					ng-model="tournamentParms.gamesPerMatch" 
+					ng-options="nbr for nbr in model.gamesPerMatch track by nbr">
+						<option value=""><- Select One -></option>
+				</select>
+			</div>
+			<div class=inputlabel>Player Count</div>
+			<div class=inputwrapper>
+				<select 
+					required 
+					name="playerCount" 
+					ng-model="tournamentParms.playerCount" 
+					ng-options="nbr for nbr in model.playerCount.options track by nbr">
+						<option value=""><- Select One -></option>
+				</select>
+			</div>
+			<div class=inputlabel>&nbsp;</div>
+			<div class=inputwrapper>
+				<input 
+					type="button" 
+					value=" Build Tournament " 
+					ng-click="getTournament();"
+					ng-disabled="tmtfrm.format.$error.required || 
+								 tmtfrm.gameType.$error.required || 
+								 tmtfrm.matchingMethod.$error.required || 
+								 tmtfrm.gamesPerMatch.$error.required || 
+								 tmtfrm.playerCount.$error.required">
+			</div>
+			<div class=inputlabel>&nbsp;</div>
+			<div class=inputwrapper id="divAjaxError">
+				<div class=inputlabel ng-bind="ajaxErrorStatus" style="text-align:left;"></div>
+				<div class=inputlabel>
+					<pre ng-bind="ajaxErrorData" width="30"></pre>
+				</div>
+			</div>
+			
+		</form>

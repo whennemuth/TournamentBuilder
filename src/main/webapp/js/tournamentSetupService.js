@@ -3,6 +3,8 @@ var tournamentSetupFactory = function($http, $q, utilsService) {
 	
 	// Set the default url
 	var _url = '/tournament/ws/rest/tournament/demo/parms';
+	// Set a the json returned through ajax here so it is part of the factory singleton (survives between controller refreshes)
+	var _data = '';
 	
 	return {
 		// Override the default url with a specific url
@@ -10,21 +12,26 @@ var tournamentSetupFactory = function($http, $q, utilsService) {
 			_url = url;
 		},
 		getModelOptions : function() {
-			var data = {};
 			var deferred = $q.defer();
-			// Make an ajax call to get the model - in this case, drop-down selections.
-			$http.get(_url)
-				.success(function(response){
-					data = response;
-					data.gamesPerMatch = [1,3,5,7];
-					data.playerCount = new utilsService.NumberArray(255);
-					deferred.resolve(data);
-				}).error(function(response){
-					data = response;
-					data.ajaxErrorStatus = 'status = ' + response.status;
-					data.ajaxErrorData = utilsService.getWordWrapped(response.data, 100);
-					deferred.reject(data);
-				});
+			if(_data) {
+				// _data is cached, so use the cached value to prevent another ajax call.
+				deferred.resolve(_data);
+			}
+			else {
+				// Make an ajax call to get the model - in this case, drop-down selections.
+				$http.get(_url)
+					.success(function(response){
+						_data = response;
+						_data.gamesPerMatch = [1,3,5,7];
+						_data.playerCount = new utilsService.NumberArray(255);
+						deferred.resolve(_data);
+					}).error(function(response){
+						_data = response;
+						_data.ajaxErrorStatus = 'status = ' + response.status;
+						_data.ajaxErrorData = utilsService.getWordWrapped(response.data, 100);
+						deferred.reject(_data);
+					});
+			}
 			return deferred.promise;
 		},
 		getDefaultSelections : {
