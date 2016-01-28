@@ -37,6 +37,7 @@ public class BasicBracketPopulator implements BracketPopulator {
 						Side side = new Side(dummyMatch);
 						// TODO: extend the line below to add players enough to satisfy GameType.playersPerSide.
 						side.addPlayer(player);
+						
 						unsortedSides.add(side);
 					}
 					sides = sideSorter.getSortedSides(unsortedSides);

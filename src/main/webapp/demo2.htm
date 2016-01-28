@@ -5,26 +5,46 @@
 	<script src = "http://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular-route.min.js"></script>
 	<script src = "js/tournamentSetupService.js"></script>
 	<script src = "js/tournamentCrudService.js"></script>
+	<script src = "js/bracketDirectives.js"></script>
 	<script src = "js/utilsService.js"></script>
 	<style>
 		.inputlabel {float:left; clear:both; text-align:right; padding:5px; width:150px;}
 		.inputwrapper {float:left; padding:5px;}
 		body, select, input[type='button']{font: 11px arial;}
 		#divAjaxError {color:red;}
+		.round {float:left; border:1px solid black; margin:5px; padding:5px; background-color:#ffe6cc;}
+		.match {float:left; border:1px solid black; margin:5px; padding:5px; background-color:#d9e6f2;}
+		.side {float:left; border:1px solid black; margin:5px; padding:5px; background-color:#f2d9d9}
+		.member {float:left; border:1px solid black; margin:5px; padding:5px; background-color:#eeeedd}
 	</style>
 	
 	<div ng-app="tournamentApp" ng-controller="tournamentController">
 	
 		<a href="#/parameters">parameters</a>&nbsp;&nbsp;
 	
-		<a href="#/tournament">tournament</a>
+		<a href="#/tournament">tournament</a>&nbsp;&nbsp;
+	
+		<a href="#/rawjson">raw json</a>&nbsp;&nbsp;
+	
+		<a href="#" onclick="document.location.href = 'demo2.htm';">refresh</a>
 		
 		<div ng-view></div>
 		
 		<script type="text/ng-template" id="tournament.htm">
-			// TODO: Make a custom directive to display the json graphically as brackets - https://docs.angularjs.org/guide/directive
-			<textarea cols=100 rows=30>{{tournament}}</textarea>
+			<bracket1></bracket1>
+			<!--
+			<bracket2></bracket2>
+			<bracket3></bracket3>
+			-->
 		</script>		
+		
+		<script type="text/ng-template" id="rawjson.htm">
+			<textarea cols=100 rows=30 style='float:left;'>{{tournament}}</textarea>
+		</script>		
+		
+		<bracket1></bracket1>
+		<bracket2></bracket2>
+		<bracket3></bracket3>
 		
 	</div>
 	
@@ -33,7 +53,7 @@
 		var SETUP_SVC_URL = CRUD_SVC_URL + '/parms';
 		
 		var app = angular.module("tournamentApp", ['ngRoute']);
-
+		
 		app.config(['$routeProvider', function($routeProvider){
 			$routeProvider
 				.when('/parameters', {
@@ -44,11 +64,24 @@
 					templateUrl: 'tournament.htm',
 					controller: 'tournamentController'
 				})
+				.when('/rawjson', {
+					templateUrl: 'rawjson.htm',
+					controller: 'tournamentController'
+				})
 				.otherwise({
 					redirectTo: '/parameters'
 				});
 		}]);
 		
+		/**
+		 * NOTE: Whatever state is assigned to $scope is lost when the route is changed (ie: clicking a 
+		 * link, href='#newRoute'). The controller is re-run and is passed a re-initialized $scope
+		 * variable (state is blanked out). Therefore, state (like user input against the model or data 
+		 * acquired from ajax calls) is not directly assigned to $scope in the success function of the 
+		 * promise object when a route change is yet to occur. Instead, we take advantage of the fact that the 
+		 * injected services are singletons and their properties survive between route changes. State is 
+		 * stored as service properties and is restored on the $scope variable each time the controller is run/re-run.
+		 */
 		app.controller("tournamentController", function($scope, $routeParams, $location, setupService, crudService, utilsService) {
 
 			// Get an ajax promise for the model (dropdown options) and their default selections.
@@ -68,12 +101,6 @@
 			$scope.getTournament = function() {
 				crudService.getTournamentData($scope.tournamentParms).then(
 					function(data){
-						/**
-						 * Cannot set the scope with data because changing the route to '/tournament' will reset the scope 
-						 * and the data will be lost. Instead, using the fact that the crudServiceProvider is a singleton 
-						 * and will not be reset, we can store the data there and then use a crudService.getData() to reset 
-						 * the scope when this controller is re-run when the route is changed.
-						 */
 						$location.url('/tournament'); // change the route to view the json data of the tournament.
 					},
 					function(error) {
@@ -86,10 +113,22 @@
 		// Setup injection for the various services.
 		app.factory("utilsService", tournamentUtilsFactory);
 		app.factory("setupService", tournamentSetupFactory);
+		app.factory("bracketDirectiveService", bracketDirectiveFactory);
 		// There is no reason to use a provider here instead of a factory. Just trying new things out.
 		app.provider("crudService", tournamentCrudProvider);
 		app.config(function(crudServiceProvider){
 			crudServiceProvider.setUrl(CRUD_SVC_URL);
+		});
+
+		// Set up directives
+		app.directive("bracket1", function(bracketDirectiveService) { 
+			return bracketDirectiveService.directive1
+		})
+		.directive("bracket2", function(bracketDirectiveService) { 
+			return bracketDirectiveService.directive1
+		})
+		.directive("bracket3", function(bracketDirectiveService) { 
+			return bracketDirectiveService.directive1
 		});
 
 	</script>
