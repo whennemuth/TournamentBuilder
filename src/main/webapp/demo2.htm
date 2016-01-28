@@ -13,39 +13,35 @@
 		body, select, input[type='button']{font: 11px arial;}
 		#divAjaxError {color:red;}
 		.round {float:left; border:1px solid black; margin:5px; padding:5px; background-color:#ffe6cc;}
-		.match {float:left; border:1px solid black; margin:5px; padding:5px; background-color:#d9e6f2;}
-		.side {float:left; border:1px solid black; margin:5px; padding:5px; background-color:#f2d9d9}
-		.member {float:left; border:1px solid black; margin:5px; padding:5px; background-color:#eeeedd}
+		.match {float:left; clear:both; border:1px solid black; margin:5px; padding:5px; background-color:#d9e6f2;}
+		.side {float:left; clear:both; border:1px solid black; margin:5px; padding:5px; background-color:#f2d9d9;}
+		.member {float:left; clear:both; border:1px solid black; margin:5px; padding:5px; background-color:#eeeedd;}
+		.error {float:left; clear:both; border:1px solid black; margin:5px; padding:5px; color:#ff3333; background-color:#ffe6cc;}
 	</style>
 	
 	<div ng-app="tournamentApp" ng-controller="tournamentController">
 	
-		<a href="#/parameters">parameters</a>&nbsp;&nbsp;
-	
-		<a href="#/tournament">tournament</a>&nbsp;&nbsp;
-	
-		<a href="#/rawjson">raw json</a>&nbsp;&nbsp;
-	
+		<a href="#/parameters">parameters</a>&nbsp;&nbsp;	
+		<a href="#/bracketView1">bracket view 1</a>&nbsp;&nbsp;	
+		<a href="#/bracketView2">bracket view 2</a>&nbsp;&nbsp;	
+		<a href="#/bracketView3">bracket view 3</a>&nbsp;&nbsp;	
+		<a href="#/rawjson">raw json</a>&nbsp;&nbsp;	
 		<a href="#" onclick="document.location.href = 'demo2.htm';">refresh</a>
 		
 		<div ng-view></div>
 		
-		<script type="text/ng-template" id="tournament.htm">
+		<script type="text/ng-template" id="bracketView1.htm">
 			<bracket1></bracket1>
-			<!--
-			<bracket2></bracket2>
-			<bracket3></bracket3>
-			-->
 		</script>		
-		
+		<script type="text/ng-template" id="bracketView2.htm">
+			<bracket2></bracket2>
+		</script>			
+		<script type="text/ng-template" id="bracketView3.htm">
+			<bracket3></bracket3>
+		</script>		
 		<script type="text/ng-template" id="rawjson.htm">
 			<textarea cols=100 rows=30 style='float:left;'>{{tournament}}</textarea>
 		</script>		
-		
-		<bracket1></bracket1>
-		<bracket2></bracket2>
-		<bracket3></bracket3>
-		
 	</div>
 	
 	<script>
@@ -60,8 +56,16 @@
 					templateUrl: 'tournamentParameters.htm',
 					controller: 'tournamentController'
 				})
-				.when('/tournament', {
-					templateUrl: 'tournament.htm',
+				.when('/bracketView1', {
+					templateUrl: 'bracketView1.htm',
+					controller: 'tournamentController'
+				})
+				.when('/bracketView2', {
+					templateUrl: 'bracketView2.htm',
+					controller: 'tournamentController'
+				})
+				.when('/bracketView3', {
+					templateUrl: 'bracketView3.htm',
 					controller: 'tournamentController'
 				})
 				.when('/rawjson', {
@@ -101,7 +105,7 @@
 			$scope.getTournament = function() {
 				crudService.getTournamentData($scope.tournamentParms).then(
 					function(data){
-						$location.url('/tournament'); // change the route to view the json data of the tournament.
+						$location.url('/bracketView1'); // change the route to view the json data of the tournament.
 					},
 					function(error) {
 						utilsService.displayAjaxError(error, $scope);
@@ -125,10 +129,10 @@
 			return bracketDirectiveService.directive1
 		})
 		.directive("bracket2", function(bracketDirectiveService) { 
-			return bracketDirectiveService.directive1
+			return bracketDirectiveService.directive2
 		})
 		.directive("bracket3", function(bracketDirectiveService) { 
-			return bracketDirectiveService.directive1
+			return bracketDirectiveService.directive3
 		});
 
 	</script>
