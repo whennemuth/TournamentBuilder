@@ -34,7 +34,7 @@
 			<bracket1></bracket1>
 		</script>		
 		<script type="text/ng-template" id="bracketView2.htm">
-			<bracket2></bracket2>
+			<bracket2 ng-repeat="item in tournament.brackets[0].rounds" roundItem="item"></bracket2>
 		</script>			
 		<script type="text/ng-template" id="bracketView3.htm">
 			<bracket3></bracket3>
@@ -129,8 +129,11 @@
 			return bracketDirectiveService.directive1
 		})
 		.directive("bracket2", function(bracketDirectiveService) { 
-			return bracketDirectiveService.directive2
+			return bracketDirectiveService.directive2_bracket
 		})
+		//.directive("round", function(bracketDirectiveService) {
+		//	return bracketDirectiveService.directive2_round;
+		//})
 		.directive("bracket3", function(bracketDirectiveService) { 
 			return bracketDirectiveService.directive3
 		});

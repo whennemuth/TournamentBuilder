@@ -22,7 +22,7 @@ var tournamentCrudProvider = function() {
 					data: tournamentParms
 				}).then(
 					function successCallback(response){
-						_data = response;
+						_data = response.data.data;
 						deferred.resolve(_data);
 					}, 
 					function errorCallback(response){

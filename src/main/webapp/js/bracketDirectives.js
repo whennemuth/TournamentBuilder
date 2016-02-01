@@ -2,7 +2,7 @@ var errorDiv = "<div class='error' style='clear:both;'>#</div>";
 
 var bracketDirectiveFactory = function(crudService) {	
 	return {
-		directive1 : {
+		directive1 : {	// Outputs static tournament display html - no data binding and no DOM manipulation.
 			transclude: false,
 			restrict: 'E',
 			compile: function(element, attributes, transclude){
@@ -12,13 +12,13 @@ var bracketDirectiveFactory = function(crudService) {
 				var matchDiv = "<div class='match'>match #<br> <sides></div>\r\n";
 				var sideDiv = "<div class='side'>side #<br> <members></div>\r\n";
 				var memberDiv = "<div class='member'>#</div>\r\n";
-				var restReply = crudService.getData();
-				if(restReply.data == undefined) {
+				var tournament = crudService.getData();
+				if(tournament == undefined || tournament.brackets == undefined) {
 					element.html(errorDiv.replace('#', 'No tournament data! Must request tournament from server.'));
 					element.css('background-color', 'red');
 					return;
 				}
-				var rounds = restReply.data.data.brackets[0].rounds;
+				var rounds = tournament.brackets[0].rounds;
 				var sideCount = 1;
 				
 				for(var i=1; i<=rounds.length; i++) {
@@ -50,19 +50,34 @@ var bracketDirectiveFactory = function(crudService) {
 				element.html(html);
 			}
 		},
-		directive2 : {
+		directive2_bracket : {
 			transclude: false,
 			restrict: 'E',
-			compile: function(element, attributes, transclude){
-				element.html(errorDiv.replace('#', 'DIRECTIVE # 2 NOT IMPLEMENTED'));
-				element.css('backgroundColor', 'red');
-			}
+			link: function(scope, element, attrs) {
+				//alert(scope);
+			},
+			scope: {
+				round: '=roundItem'
+			},
+			template: "<div class='round' style='clear:both;'>{{round}}</div>\r\n"
+//			compile: function(element, attributes, transclude){
+//				element.html(errorDiv.replace('#', 'DIRECTIVE2 NOT IMPLEMENTED'));
+//				element.css('backgroundColor', 'red');
+//			}
 		},
+//		directive2_round : {
+//			transclude: false,
+//			restrict: 'E',
+//			compile: function(element, attributes, transclude){
+//				element.html(errorDiv.replace('#', 'DIRECTIVE2_ROUND NOT IMPLEMENTED'));
+//				element.css('backgroundColor', 'red');
+//			}
+//		},
 		directive3 : {
 			transclude: false,
 			restrict: 'E',
 			compile: function(element, attributes, transclude){
-				element.html(errorDiv.replace('#', 'DIRECTIVE # 3 NOT IMPLEMENTED'));
+				element.html(errorDiv.replace('#', 'DIRECTIVE3 NOT IMPLEMENTED'));
 				element.css('backgroundColor', 'red');
 			}
 		}
