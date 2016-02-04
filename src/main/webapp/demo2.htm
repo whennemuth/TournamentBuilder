@@ -12,6 +12,7 @@
 		.inputwrapper {float:left; padding:5px;}
 		body, select, input[type='button']{font: 11px arial;}
 		#divAjaxError {color:red;}
+		.bracket {float:left; border:1px solid green; margin:5px; padding:5px; background-color:#ccffcc;}
 		.round {float:left; border:1px solid black; margin:5px; padding:5px; background-color:#ffe6cc;}
 		.match {float:left; clear:both; border:1px solid black; margin:5px; padding:5px; background-color:#d9e6f2;}
 		.side {float:left; clear:both; border:1px solid black; margin:5px; padding:5px; background-color:#f2d9d9;}
@@ -34,7 +35,14 @@
 			<bracket1></bracket1>
 		</script>		
 		<script type="text/ng-template" id="bracketView2.htm">
-			<bracket2 ng-repeat="item in tournament.brackets[0].rounds" roundItem="item"></bracket2>
+			<round roundItem="tournament.brackets[0].rounds[0]"></round>
+			{{tournament.brackets[0].rounds[0].matches.length}}<br><br>
+<!--
+			<div ng-repeat="item in tournament.brackets[0].rounds">
+				<round roundItem="item"></round>
+				{{item.matches.length}}
+			</div>
+-->
 		</script>			
 		<script type="text/ng-template" id="bracketView3.htm">
 			<bracket3></bracket3>
@@ -105,7 +113,7 @@
 			$scope.getTournament = function() {
 				crudService.getTournamentData($scope.tournamentParms).then(
 					function(data){
-						$location.url('/bracketView1'); // change the route to view the json data of the tournament.
+						$location.url('/bracketView2'); // change the route to view the json data of the tournament.
 					},
 					function(error) {
 						utilsService.displayAjaxError(error, $scope);
@@ -128,12 +136,12 @@
 		app.directive("bracket1", function(bracketDirectiveService) { 
 			return bracketDirectiveService.directive1
 		})
-		.directive("bracket2", function(bracketDirectiveService) { 
-			return bracketDirectiveService.directive2_bracket
+//		.directive("bracket2", function(bracketDirectiveService) { 
+//			return bracketDirectiveService.directive2_bracket
+//		})
+		.directive("round", function(bracketDirectiveService) {
+			return bracketDirectiveService.directive2_round;
 		})
-		//.directive("round", function(bracketDirectiveService) {
-		//	return bracketDirectiveService.directive2_round;
-		//})
 		.directive("bracket3", function(bracketDirectiveService) { 
 			return bracketDirectiveService.directive3
 		});

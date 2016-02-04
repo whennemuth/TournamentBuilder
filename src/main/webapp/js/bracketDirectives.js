@@ -50,29 +50,36 @@ var bracketDirectiveFactory = function(crudService) {
 				element.html(html);
 			}
 		},
-		directive2_bracket : {
-			transclude: false,
-			restrict: 'E',
-			link: function(scope, element, attrs) {
-				//alert(scope);
-			},
-			scope: {
-				round: '=roundItem'
-			},
-			template: "<div class='round' style='clear:both;'>{{round}}</div>\r\n"
+//		directive2_bracket : {
+//			transclude: false,
+//			restrict: 'E',
+//			link: function(scope, element, attrs) {
+//				alert(scope);
+//			},
+//			scope: {
+//				rounds: '=roundItems'
+//			},
+//			template: "<round ng-repeat='round in rounds'></div>\r\n"
 //			compile: function(element, attributes, transclude){
 //				element.html(errorDiv.replace('#', 'DIRECTIVE2 NOT IMPLEMENTED'));
 //				element.css('backgroundColor', 'red');
 //			}
-		},
-//		directive2_round : {
+//		},
+		directive2_round : {
 //			transclude: false,
-//			restrict: 'E',
+			restrict: 'E',
+//			link: function(scope, element, attrs) {
+//				alert(scope);
+//			},
+			scope: {
+				round: '=roundItem'
+			},
+			template: "<div class='round' style='clear:both;'>{{round.matches.length}}</div>\r\n",
 //			compile: function(element, attributes, transclude){
 //				element.html(errorDiv.replace('#', 'DIRECTIVE2_ROUND NOT IMPLEMENTED'));
 //				element.css('backgroundColor', 'red');
 //			}
-//		},
+		},
 		directive3 : {
 			transclude: false,
 			restrict: 'E',
